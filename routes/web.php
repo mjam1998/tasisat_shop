@@ -51,6 +51,9 @@ Route::prefix('/admin')->group(function(){
          Route::get('/excel/create', [AdminProductController::class,'excelCreate'])->name('admin.product.excel.create');
          Route::post('/excel/import', [AdminProductController::class,'excelImport'])->name('admin.product.excel.import');
          Route::get('/excel/template', [AdminProductController::class,'excelTemplate'])->name('admin.product.excel.template');
+       Route::post('/excel/import-sub-products', [AdminProductController::class, 'importSubProducts'])->name('admin.products.import-sub-products');
+       Route::get('/admin/products/download-sub-product-template', [AdminProductController::class, 'downloadSubProductTemplate'])->name('admin.products.download-sub-product-template');
+
    });
 });
 

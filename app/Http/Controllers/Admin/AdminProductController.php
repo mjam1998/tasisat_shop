@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Vtiful\Kernel\Excel;
 
 class AdminProductController extends Controller
 {
@@ -488,6 +489,105 @@ class AdminProductController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+    public function importSubProducts(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|file|extensions:xlsx,xls,csv|max:10240',
+        ], [
+            'file.required' => 'لطفاً فایل را انتخاب کنید.',
+            'file.extensions' => 'فرمت فایل باید xlsx، xls یا csv باشد.',
+            'file.max' => 'حجم فایل نباید بیشتر از 10 مگابایت باشد.',
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $import = new SubProductsImport();
+            Excel::import($import, $file);
+
+            $result = $import->getResult();
+
+            return redirect()->back()->with('success',
+                "عملیات با موفقیت انجام شد. " .
+                "تعداد {$result['created']} محصول جدید ایجاد، " .
+                "{$result['updated']} محصول به‌روزرسانی و " .
+                "{$result['sub_products']} زیرمحصول ثبت شد. " .
+                ($result['failed'] > 0 ? "تعداد {$result['failed']} ردیف با خطا مواجه شد." : "")
+            );
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'خطا در پردازش فایل: ' . $e->getMessage());
+        }
+    }
+
+    public function downloadSubProductTemplate()
+    {
+        $headers = [
+            'code',
+            'name',
+            'category_id',
+            'description',
+            'meta_title',
+            'meta_description',
+            'keywords',
+            'image',
+            'image_alt',
+            'image_title',
+            'sub_product_name',
+            'sub_product_price',
+            'sub_product_discount'
+        ];
+
+        $sampleData = [
+            [
+                'PROD001',
+                'محصول نمونه',
+                '1',
+                'توضیحات محصول',
+                'عنوان متا',
+                'توضیحات متا',
+                'کلمات کلیدی',
+                'image.jpg',
+                'alt text',
+                'title text',
+                'مدل A',
+                '100000',
+                '10'
+            ],
+            [
+                'PROD001',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                'مدل B',
+                '150000',
+                '15'
+            ],
+        ];
+
+        return Excel::download(new class($headers, $sampleData) implements FromArray, WithHeadings {
+            private $headers;
+            private $data;
+
+            public function __construct($headers, $data) {
+                $this->headers = $headers;
+                $this->data = $data;
+            }
+
+            public function array(): array {
+                return $this->data;
+            }
+
+            public function headings(): array {
+                return $this->headers;
+            }
+        }, 'sub-products-template.xlsx');
     }
 
 }
