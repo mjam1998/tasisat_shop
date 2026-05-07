@@ -56,7 +56,7 @@
                                 <div class="alert alert-warning mt-3">
                                     <strong>مثال ساختار فایل:</strong>
                                     <pre class="mb-0" style="font-size: 12px;">
-code     | name          | category_id | sub_product_name | sub_product_price | sub_product_discount
+code     | name          | category_slug | sub_product_name | sub_product_price | sub_product_discount
 ---------|---------------|-------------|------------------|-------------------|---------------------
 PROD001  | محصول اول     | 1           | مدل A            | 100000            | 10
 PROD001  |               |             | مدل B            | 150000            | 15
@@ -66,12 +66,12 @@ PROD002  |               |             | مدل Y            | 350000           
                                 </pre>
                                 </div>
 
-                                <a href="{{route('admin.products.download-sub-product-template')}}" class="btn btn-sm btn-outline-primary">
+                                <a href="{{route('products.download-sub-product-template')}}" class="btn btn-sm btn-outline-primary">
                                     <i class="bi bi-download"></i> دانلود فایل نمونه
                                 </a>
                             </div>
 
-                            <form method="post" action="{{route('admin.products.import-sub-products')}}" enctype="multipart/form-data">
+                            <form method="post" action="{{route('products.import-sub-products')}}" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="mb-3">

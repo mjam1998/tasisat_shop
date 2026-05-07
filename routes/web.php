@@ -51,10 +51,23 @@ Route::prefix('/admin')->group(function(){
          Route::get('/excel/create', [AdminProductController::class,'excelCreate'])->name('admin.product.excel.create');
          Route::post('/excel/import', [AdminProductController::class,'excelImport'])->name('admin.product.excel.import');
          Route::get('/excel/template', [AdminProductController::class,'excelTemplate'])->name('admin.product.excel.template');
-       Route::post('/excel/import-sub-products', [AdminProductController::class, 'importSubProducts'])->name('admin.products.import-sub-products');
-       Route::get('/admin/products/download-sub-product-template', [AdminProductController::class, 'downloadSubProductTemplate'])->name('admin.products.download-sub-product-template');
+         Route::get('/excel/create-sub-product',[AdminProductController::class,'excelCreateSubProduct'])->name('admin.product.excel.create-sub-product');
+         Route::post('/excel/import-sub-products', [AdminProductController::class, 'importSubProducts'])->name('products.import-sub-products');
+         Route::get('/excel/sub-product-template', [AdminProductController::class, 'downloadSubProductTemplate'])->name('products.download-sub-product-template');
+       Route::put('subproduct/{subproduct}',
+           [AdminProductController::class,'updateSubProduct'])
+           ->name('admin.subproduct.update');
 
+       Route::delete('subproduct/{subproduct}',
+           [AdminProductController::class,'destroySubProduct'])
+           ->name('admin.subproduct.destroy');
+
+       Route::get('subproduct/{subproduct}/edit',
+           [AdminProductController::class,'editSubProduct'])
+           ->name('admin.subproduct.edit');
    });
+
+
 });
 
 

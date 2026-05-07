@@ -58,7 +58,7 @@
 
                     <li><a href="{{route('admin.product.create')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن محصول</a></li>
                     <li><a href="{{route('admin.product.excel.create')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات ثابت</a></li>
-                    <li><a href="{{route('admin.product.excel.create')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات متغیر</a></li>
+                    <li><a href="{{route('admin.product.excel.create-sub-product')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات متغیر</a></li>
                     <li><a href="{{route('admin.product.index')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> لیست محصولات</a></li>
 
                 </ul>

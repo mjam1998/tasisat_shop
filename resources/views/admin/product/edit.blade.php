@@ -154,6 +154,56 @@
                 </div>
 
             </form>
+            @if($product->subProducts->count())
+                <hr class="mt-5">
+                <h4 class="mt-4 mb-3">
+                    <i class="bi bi-box-seam"></i> زیرمحصول‌ها
+                </h4>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>سایز</th>
+                            <th>کد</th>
+                            <th>موجودی</th>
+                            <th>قیمت</th>
+                            <th>تخفیف</th>
+                            <th>عملیات</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($product->subProducts as $sub)
+                            <tr>
+                                <td>{{ $sub->size }}</td>
+                                <td>{{ $sub->code }}</td>
+                                <td>{{ $sub->count }}</td>
+                                <td>{{ number_format($sub->price) }}</td>
+                                <td>{{ $sub->discount }}</td>
+                                <td>
+                                    <a href="{{ route('admin.subproduct.edit',$sub->id) }}"
+                                       class="btn btn-sm btn-warning">
+                                        ویرایش
+                                    </a>
+
+                                    <form action="{{ route('admin.subproduct.destroy',$sub->id) }}"
+                                          method="POST"
+                                          style="display:inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger"
+                                                onclick="return confirm('حذف شود؟')">
+                                            حذف
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
         </div>
     </div>
 
