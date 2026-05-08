@@ -1,19 +1,21 @@
 <div>
     {{-- جستجو --}}
     <div class="row mb-3 g-2">
-        <div class="col-12 col-md-9">
+        <div class="col-12 col-md-8">
             <input type="text"
                    wire:model.defer="searchInput"
                    wire:keydown.enter="applySearch"
                    class="form-control"
-                   placeholder="جستجو بر اساس نام، اسلاگ یا کد محصول... ">
+                   placeholder="جستجو بر اساس نام">
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-6 col-md-2">
             <button wire:click="applySearch" class="btn btn-primary w-100">
                 جستجو
             </button>
         </div>
-
+        <div class="col-6 col-md-2">
+            <a href="{{route('admin.product.comment.create',['product'=>$productId])}}" class="btn btn-primary w-100" style="background-color: #0e9f6e;color: white;">افزودن</a>
+        </div>
     </div>
 
     {{-- جدول --}}
@@ -23,26 +25,17 @@
             <tr>
 
                 <th class="text-center">نام</th>
-                <th class="text-center">اسلاگ</th>
-                <th class="text-center">کد</th>
-                <th class="text-center">دسته بندی</th>
+                <th class="text-center">وضعیت</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
 
             <tbody>
-            @forelse($products as $product)
+            @forelse($comments as $comment)
                 <tr>
 
-
-                    <td title="{{ $product->name }}">
-                        {{ \Illuminate\Support\Str::limit( $product->name, 25) }}
-                    </td>
-                    <td class="text-center">{{ $product->slug }}</td>
-                    <td class="text-center">{{ $product->code }}</td>
-                    <td title="{{ $product->category->name }}">
-                        {{ \Illuminate\Support\Str::limit( $product->category->name, 20) }}
-                    </td>
+                    <td class="text-center">{{ $comment->name }}</td>
+                    <td class="text-center">{{ $comment->status->label() }}</td>
                     <td class="text">
                         <div class="dropdown position-static">
                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
@@ -53,24 +46,20 @@
 
 
                                 <li>
-                                    <a href="{{route('admin.product.edit',['product'=>$product])}}" class="dropdown-item" >
+                                    <a href="{{route('admin.product.comment.edit',['product'=>$productId,'comment'=>$comment])}}" class="dropdown-item" >
                                         <i class="bi bi-pencil me-2"></i> ویرایش
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{route('admin.product.comment.list',['product'=>$product])}}" class="dropdown-item" >
-                                        <i class="bi bi-chat me-2"></i> کامنت ها
-                                    </a>
-                                </li>
+
 
                                 <li>
                                     <a class="dropdown-item text-danger"
                                        href="#"
-                                       onclick="cancelArticle('{{ route('admin.product.delete', ['product'=>$product]) }}', 'cancel-article-form-{{ $product->id }}')">
+                                       onclick="cancelArticle('{{ route('admin.product.comment.delete', ['comment'=>$comment]) }}', 'cancel-article-form-{{ $comment->id }}')">
                                         <i class="bi bi-trash me-2"></i> حذف
                                     </a>
-                                    <form id="cancel-article-form-{{ $product->id }}"
-                                          action="{{ route('admin.product.delete', ['product'=>$product]) }}"
+                                    <form id="cancel-article-form-{{ $comment->id }}"
+                                          action="{{ route('admin.product.comment.delete', ['comment'=>$comment]) }}"
                                           method="POST"
                                           style="display:none;">
                                         @csrf
@@ -85,7 +74,7 @@
             @empty
                 <tr>
                     <td colspan="4" class="text-center text-muted">
-                         محصول یافت نشد
+                         کامنتی یافت نشد
                     </td>
                 </tr>
             @endforelse
@@ -95,7 +84,7 @@
 
     {{-- صفحه‌بندی --}}
     <div class="mt-3">
-        {{ $products->links() }}
+        {{ $comments->links() }}
     </div>
 </div>
 

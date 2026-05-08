@@ -5,7 +5,7 @@
         <div class="profile-content">
             <div class="profile-section active">
                 <h3 class="section-title mb-4">
-                    <i class="bi bi-file-earmark-excel"></i> ایجاد محصولات از طریق اکسل
+                    <i class="bi bi-file-earmark-excel"></i> ایجاد محصولات ثابت از طریق اکسل
                 </h3>
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -39,6 +39,7 @@
                                 <li>کلمات کلیدی را با کاما (,) جدا کنید</li>
                                 <li>اسلاگ دسته‌بندی باید از قبل در سیستم موجود باشد</li>
                                 <li>عکس باید قبلا اپلود شده باشد، اسم عکس با پسوند نوشته شود</li>
+                                <li>اگر <code>code</code> محصول از قبل وجود داشته باشد، اطلاعات آن <strong>به‌روزرسانی</strong> می‌شود</li>
                             </ul>
                             <a href="{{route('admin.product.excel.template')}}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-download"></i> دانلود فایل نمونه

@@ -78,39 +78,42 @@
                             <input type="number" class="form-control mt-2" name="discount" value="{{old('discount', $product->discount)}}">
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label required">قیمت(تومان)</label>
-                            <input type="number" class="form-control mt-2" name="price" value="{{old('price', $product->price)}}" required>
+                    @if(!$product->has_sub_product)
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label required">قیمت(تومان)</label>
+                                <input type="number" class="form-control mt-2" name="price" value="{{old('price', $product->price)}}" required>
+                            </div>
                         </div>
-                    </div>
+                    @endif
+
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label">عنوان متا صفحه (title)</label>
+                            <label class="control-label"> عنوان متا صفحه (title)</label>
                             <input type="text" class="form-control mt-2" name="meta_title" value="{{old('meta_title', $product->meta_title)}}" maxlength="300">
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label">توضیحات متا (meta description)</label>
+                            <label class="control-label"> توضیحات متا (meta description) </label>
                             <input type="text" class="form-control mt-2" name="meta_description" value="{{old('meta_description', $product->meta_description)}}" maxlength="300">
                         </div>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">کلمات کلیدی (keywords)</label>
+                            <label class="control-label"> کلمات کلیدی (keywords)</label>
                             <input type="text" class="form-control mt-2" id="keywords-input" name="keywords" value="{{old('keywords', $product->keywords)}}" placeholder="کلمه را تایپ کنید و Enter بزنید">
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">تصویر محصول</label>
-                            <input type="file" class="form-control mt-2" name="image" accept="image/*">
-                            <span style="font-size: small;color: grey">در صورت وارد نکردن، تصویر قبلی حفظ می‌شود.</span>
+                            <label class="control-label"> تصویر محصول</label>
+                            <input type="file"  class="form-control mt-2" name="image" accept="image/*">
+                            <span style="font-size: small;color: grey"> در صورت وارد نکردن، تصویر قبلی حفظ می‌شود.</span>
                             @if($product->image)
                                 <div class="mt-3">
                                     <img src="{{asset('product/'.$product->image)}}" alt="{{$product->image_alt}}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
@@ -121,21 +124,21 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Alt تصویر</label>
+                            <label class="control-label"> Alt تصویر</label>
                             <input type="text" class="form-control mt-2" name="image_alt" value="{{old('image_alt', $product->image_alt)}}" maxlength="400">
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Title تصویر</label>
+                            <label class="control-label">Title تصویر </label>
                             <input type="text" class="form-control mt-2" name="image_title" value="{{old('image_title', $product->image_title)}}" maxlength="400">
                         </div>
                     </div>
 
                     <div class="col-12">
                         <div class="form-group">
-                            <label class="form-label mt-3">توضیحات محصول</label>
+                            <label class="form-label mt-3">توضیحات محصول </label>
                             @include('partial.editor',['value'=>$product->description ?? ''])
                         </div>
                     </div>
@@ -154,51 +157,70 @@
                 </div>
 
             </form>
-            @if($product->subProducts->count())
+            @if($product->has_sub_product)
                 <hr class="mt-5">
-                <h4 class="mt-4 mb-3">
-                    <i class="bi bi-box-seam"></i> زیرمحصول‌ها
-                </h4>
+                <div class="d-flex align-items-center mt-4 mb-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-box-seam"></i> زیرمحصول‌ها
+                    </h4>
 
+                    <a href="{{route('admin.subproduct.create',['product'=>$product])}}"
+                       class="btn btn-success btn-sm ms-auto">
+                        <i class="bi bi-plus-lg"></i>
+                        افزودن زیرمحصول
+                    </a>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered text-center align-middle">
                         <thead class="table-light">
                         <tr>
-                            <th>سایز</th>
-                            <th>کد</th>
-                            <th>موجودی</th>
+                            <th>نام</th>
                             <th>قیمت</th>
                             <th>تخفیف</th>
                             <th>عملیات</th>
                         </tr>
                         </thead>
                         <tbody>
+                        @if($product->subProducts->count())
                         @foreach($product->subProducts as $sub)
                             <tr>
-                                <td>{{ $sub->size }}</td>
-                                <td>{{ $sub->code }}</td>
-                                <td>{{ $sub->count }}</td>
+                                <td>{{ $sub->name }}</td>
                                 <td>{{ number_format($sub->price) }}</td>
                                 <td>{{ $sub->discount }}</td>
                                 <td>
-                                    <a href="{{ route('admin.subproduct.edit',$sub->id) }}"
-                                       class="btn btn-sm btn-warning">
-                                        ویرایش
-                                    </a>
+                                    <div class="dropdown position-static">
+                                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
+                                            عملیات  <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
 
-                                    <form action="{{ route('admin.subproduct.destroy',$sub->id) }}"
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a href="{{ route('admin.subproduct.edit',$sub->id) }}"
+                                                   class="dropdown-item">
+                                                    <i class="bi bi-pencil me-2"></i> ویرایش
+                                                </a>
+                                            </li>
+                                        <li>
+                                            <a class="dropdown-item text-danger"
+                                               href="#"
+                                               onclick="cancelArticle('{{ route('admin.subproduct.destroy',$sub->id)}}', 'cancel-article-form-{{ $sub->id }}')">
+                                                <i class="bi bi-trash me-2"></i> حذف
+                                            </a>
+                                        </li>
+
+                                    <form id="cancel-article-form-{{ $sub->id }}"
+                                          action="{{ route('admin.subproduct.destroy',$sub->id) }}"
                                           method="POST"
-                                          style="display:inline-block">
+                                          style="display:none;">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('حذف شود؟')">
-                                            حذف
-                                        </button>
                                     </form>
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
+                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -225,6 +247,25 @@
             var tags = tagify.value.map(tag => tag.value).join(',');
             input.value = tags;
         });
+
+        function cancelArticle(url, formId) {
+            Swal.fire({
+                title: 'آیا مطمئن هستید؟',
+                text: 'این عملیات قابل بازگشت نیست!!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'بله، حذف شود',
+                cancelButtonText: 'خیر'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById(formId);
+                    form.action = url;
+                    form.submit();
+                }
+            });
+        }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

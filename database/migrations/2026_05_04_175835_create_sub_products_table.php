@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name','400');
             $table->decimal('price',15,0)->nullable();
             $table->decimal('discount',15,0)->nullable();
+            $table->softDeletes();
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products');
         });

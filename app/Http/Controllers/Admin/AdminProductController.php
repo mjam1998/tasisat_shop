@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\product;
 use App\Models\SubProduct;
 use App\Rules\SlugRule;
@@ -489,10 +490,15 @@ class AdminProductController extends Controller
                 'slug' => [
                     'required',
                     'string',
-                    'max:255',
+                    'max:400',
                     Rule::unique('products', 'slug')->ignore($existingProduct?->id)
                 ],
-                'code' => 'required|string|max:100',
+                'code' => [
+                    'required',
+                    'string',
+                    'max:400',
+                    Rule::unique('products', 'code')->ignore($existingProduct?->id)
+                ],
                 'price' => 'required|numeric|min:0',
                 'category_slug' => 'required|string|exists:categories,slug',
                 'keywords' => 'nullable|string',
@@ -575,60 +581,6 @@ class AdminProductController extends Controller
     }
 
 
-//    public function excelTemplate()
-//    {
-//        $headers = [
-//            'Content-Type' => 'text/csv; charset=UTF-8',
-//            'Content-Disposition' => 'attachment; filename="product-template.csv"',
-//        ];
-//
-//        $columns = [
-//            'name',
-//            'slug',
-//            'code',
-//            'price',
-//            'category_slug',
-//            'keywords',
-//            'size',
-//            'count',
-//            'discount',
-//            'meta_title',
-//            'meta_description',
-//            'image_alt',
-//            'image_title',
-//            'description',
-//            'image'  // ← اضافه شد
-//        ];
-//
-//        $callback = function() use ($columns) {
-//            $file = fopen('php://output', 'w');
-//            fwrite($file, "\xEF\xBB\xBF"); // UTF-8 BOM
-//            fputcsv($file, $columns);
-//
-//            // نمونه داده
-//            fputcsv($file, [
-//                'محصول نمونه',
-//                'product-sample',
-//                'P001',
-//                '150000',
-//                'category-slug',
-//                'کلمه1,کلمه2',
-//                'Large',
-//                '10',
-//                '5',
-//                'عنوان متا',
-//                'توضیحات متا',
-//                'alt text',
-//                'title text',
-//                'توضیحات محصول',
-//                'product1.jpg'  // ← نمونه
-//            ]);
-//
-//            fclose($file);
-//        };
-//
-//        return response()->stream($callback, 200, $headers);
-//    }
     public function excelTemplate()
     {
         $spreadsheet = new Spreadsheet();
@@ -643,7 +595,7 @@ class AdminProductController extends Controller
             'کلمات کلیدی',
             'سایز',
             'موجودی',
-            'درصد تخفیف',
+            'میزان تخفیف',
             'متا تایتل',
             'متا توضیحات',
             'alt تصویر',
@@ -656,21 +608,21 @@ class AdminProductController extends Controller
 
         // نمونه داده
         $sheet->fromArray([
-            'گوشی موبایل سامسونگ',
-            'samsung-phone',
+            'لوله پایپ',
+            'pipe-contact',
             'P1001',
             '15000000',
-            'mobile',
-            'گوشی,سامسونگ',
-            '128GB',
+            'pipe',
+            'لوله,تاسیسات',
+            '12',
             '10',
-            '5',
-            'خرید گوشی سامسونگ',
-            'بهترین گوشی سامسونگ',
-            'تصویر گوشی',
-            'Samsung Phone',
+            '500',
+            'خرید لوله',
+            'بهترین لوله پایپ',
+            'تصویر لوله',
+            'pipe-contact',
             'توضیحات کامل محصول',
-            'samsung.jpg'
+            'p1001.jpg'
         ], null, 'A2');
 
         // استایل هدر
@@ -829,12 +781,17 @@ class AdminProductController extends Controller
             $existingProduct = Product::where('code', $code)->first();
 
             $validator = Validator::make($productData, [
-                'code' => 'required|string|max:100',
+                'code' => [
+                    'required',
+                    'string',
+                    'max:400',
+                    Rule::unique('products', 'code')->ignore($existingProduct?->id)
+                ],
                 'name' => 'required|string|max:255',
                 'slug' => [  // ← اضافه شد
                     'required',
                     'string',
-                    'max:255',
+                    'max:400',
                     Rule::unique('products', 'slug')->ignore($existingProduct?->id)
                 ],
                 'category_slug' => 'required|string|exists:categories,slug',
@@ -963,7 +920,7 @@ class AdminProductController extends Controller
             'code' => 'کد محصول',
             'name' => 'نام محصول',
             'slug' => 'نامک (slug)',
-            'category_slug' => 'نامک دسته‌بندی',
+            'category_slug' => 'اسلاگ دسته‌بندی',
             'description' => 'توضیحات',
             'meta_title' => 'عنوان متا',
             'meta_description' => 'توضیحات متا',
@@ -1001,27 +958,29 @@ class AdminProductController extends Controller
 
         // ردیف نمونه 1
         $sheet->setCellValue('A2', 'PROD14');
-        $sheet->setCellValue('B2', 'گوشی سامسونگ');
-        $sheet->setCellValue('C2', 'samsung-phone');
-        $sheet->setCellValue('D2', 'mobile');
+        $sheet->setCellValue('B2', 'لوله پایپ');
+        $sheet->setCellValue('C2', 'pipe');
+        $sheet->setCellValue('D2', 'contact');
         $sheet->setCellValue('E2', 'توضیحات محصول');
-        $sheet->setCellValue('I2', 'image.jpg');
-        $sheet->setCellValue('L2', 'رم 128GB');
+        $sheet->setCellValue('H2', 'لوله,pipe');
+        $sheet->setCellValue('I2', 'pipe.jpg');
+        $sheet->setCellValue('L2', 'مدل 12 ');
         $sheet->setCellValue('M2', '15000000');
         $sheet->setCellValue('N2', '1000');
 
         // ردیف نمونه 2 (زیرمحصول دوم همان محصول)
         $sheet->setCellValue('A3', 'PROD14');
-        $sheet->setCellValue('L3', 'رم 256GB');
+        $sheet->setCellValue('L3', 'مدل 13');
         $sheet->setCellValue('M3', '18000000');
         $sheet->setCellValue('N3', '500');
 
         // ردیف نمونه 3 (محصول جدید)
         $sheet->setCellValue('A4', 'PROD15');
-        $sheet->setCellValue('B4', 'لپ‌تاپ ایسوس');
-        $sheet->setCellValue('C4', 'asus-laptop');
-        $sheet->setCellValue('D4', 'laptop');
-        $sheet->setCellValue('L4', 'Core i5');
+        $sheet->setCellValue('B4', 'سیفون');
+        $sheet->setCellValue('C4', 'sipon');
+        $sheet->setCellValue('D4', 'sip-cat');
+        $sheet->setCellValue('H4', 'سیفون,تاسیسات');
+        $sheet->setCellValue('L4', 'رنگ سفید');
         $sheet->setCellValue('M4', '25000000');
         $sheet->setCellValue('N4', '0');
 
@@ -1051,31 +1010,163 @@ class AdminProductController extends Controller
     public function updateSubProduct(Request $request, SubProduct $subproduct)
     {
         $data = $request->validate([
-            'size'     => 'required|string|max:400',
-            'code'     => 'required|string|max:400|unique:sub_products,code,'.$subproduct->id,
-            'count'    => 'required|integer|min:0',
+            'name'    => 'required|string',
             'price'    => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
         ], [
-            'size.required'  => 'وارد کردن سایز الزامی است.',
-            'code.required'  => 'وارد کردن کد الزامی است.',
-            'code.unique'    => 'این کد قبلاً ثبت شده است.',
-            'count.required' => 'وارد کردن موجودی الزامی است.',
+
             'price.required' => 'وارد کردن قیمت الزامی است.',
+            'name.required' => 'وارد کردن نام الزامی است.',
         ]);
 
         $subproduct->update($data);
 
-        // ✅ اگر خواستی قیمت محصول اصلی آپدیت شود
+
         $product = $subproduct->product;
 
-        $product->update([
-            'price' => $product->subProducts()->min('price'),
-            'count' => $product->subProducts()->sum('count'),
-        ]);
+
 
         return redirect()
             ->route('admin.product.edit', $product->id)
             ->with('success','زیرمحصول با موفقیت ویرایش شد.');
     }
+    public function createSubProduct(Product $product)
+    {
+        return view('admin.product.create-sub-product', compact('product'));
+    }
+    public function storeSubProduct(Request $request, Product $product){
+        $data = $request->validate([
+            'name'    => 'required|string',
+            'price'    => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+        ], [
+
+            'price.required' => 'وارد کردن قیمت الزامی است.',
+            'name.required' => 'وارد کردن نام الزامی است.',
+        ]);
+
+        $product->subProducts()->create($data);
+        return redirect()
+            ->route('admin.product.edit', $product->id)
+            ->with('success','زیرمحصول با موفقیت افزوده شد.');
+    }
+    public function commentList(Product $product)
+    {
+        return view('admin.product.comment.index', compact('product'));
+    }
+    public function commentCreate(Product $product)
+    {
+        return view('admin.product.comment.create', compact('product'));
+    }
+    public function commentStore(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'comment' => 'required|string',
+            'status' => 'required|integer',
+            'admin_response' => 'nullable|string',
+            'created_at' => 'required|string',
+        ], [
+            'name.required' => 'نام نظر دهنده الزامی است',
+            'name.string' => 'نام باید متن باشد',
+            'name.max' => 'نام نباید بیشتر از 255 کاراکتر باشد',
+            'comment.required' => 'متن نظر الزامی است',
+            'comment.string' => 'نظر باید متن باشد',
+            'status.required' => 'وضعیت الزامی است',
+            'status.integer' => 'وضعیت باید عدد باشد',
+            'admin_response.string' => 'پاسخ ادمین باید متن باشد',
+            'created_at.required' => 'تاریخ نظر الزامی است',
+            'created_at.string' => 'فرمت تاریخ نامعتبر است',
+        ]);
+
+        try {
+            // تبدیل تاریخ شمسی به میلادی
+            $gregorianDate = \Morilog\Jalali\Jalalian::fromFormat('Y/n/j', $validated['created_at'])
+                ->toCarbon();
+
+            Comment::create([
+                'product_id' => $product->id,
+                'name' => $validated['name'],
+                'comment' => $validated['comment'],
+                'status' => $validated['status'],
+                'admin_response' => $validated['admin_response'],
+                'created_at' => $gregorianDate,
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->route('admin.product.comment.list',['product'=>$product])->with('success', 'کامنت با موفقیت افزوده شد');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'خطا در ذخیره کامنت: فرمت تاریخ نامعتبر است')->withInput();
+        }
+    }
+    public function commentEdit(Product $product, Comment $comment)
+    {
+        // بررسی اینکه کامنت متعلق به این محصول است
+        if ($comment->product_id !== $product->id) {
+            return redirect()->route('admin.product.comment.list', $product)
+                ->with('error', 'کامنت مورد نظر یافت نشد');
+        }
+
+        return view('admin.product.comment.edit', compact('product', 'comment'));
+    }
+
+    public function commentUpdate(Request $request, Product $product, Comment $comment)
+    {
+        // بررسی اینکه کامنت متعلق به این محصول است
+        if ($comment->product_id !== $product->id) {
+            return redirect()->route('admin.product.comment.list', $product)
+                ->with('error', 'کامنت مورد نظر یافت نشد');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'comment' => 'required|string',
+            'status' => 'required|integer',
+            'admin_response' => 'nullable|string',
+            'created_at' => 'required|string',
+        ], [
+            'name.required' => 'نام نظر دهنده الزامی است',
+            'name.string' => 'نام باید متن باشد',
+            'name.max' => 'نام نباید بیشتر از 255 کاراکتر باشد',
+            'comment.required' => 'متن نظر الزامی است',
+            'comment.string' => 'نظر باید متن باشد',
+            'status.required' => 'وضعیت الزامی است',
+            'status.integer' => 'وضعیت باید عدد باشد',
+            'status.in' => 'وضعیت انتخاب شده نامعتبر است',
+            'admin_response.string' => 'پاسخ ادمین باید متن باشد',
+            'created_at.required' => 'تاریخ نظر الزامی است',
+            'created_at.string' => 'فرمت تاریخ نامعتبر است',
+        ]);
+
+        try {
+            // تبدیل تاریخ شمسی به میلادی
+            $gregorianDate = \Morilog\Jalali\Jalalian::fromFormat('Y/n/j', $validated['created_at'])
+                ->toCarbon()
+                ->format('Y-m-d H:i:s');
+
+            $comment->name = $validated['name'];
+            $comment->comment = $validated['comment'];
+            $comment->status = $validated['status'];
+            $comment->admin_response = $validated['admin_response'];
+            $comment->created_at = $gregorianDate;
+            $comment->save();
+
+            return redirect()->route('admin.product.comment.list', $product)
+                ->with('success', 'کامنت با موفقیت بروزرسانی شد');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'خطا در بروزرسانی کامنت: فرمت تاریخ نامعتبر است')
+                ->withInput();
+        }
+    }
+    public function commentDelete(Comment $comment)
+    {
+        $comment->delete();
+        return back()
+            ->with('success', 'کامنت با موفقیت حذف شد');
+    }
+
+
 }

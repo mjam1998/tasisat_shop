@@ -52,7 +52,11 @@
                                         <i class="bi bi-pencil me-2"></i> ویرایش
                                     </a>
                                 </li>
-
+                                <li>
+                                    <a href="{{route('admin.product.comment.list',['product'=>$product])}}" class="dropdown-item" >
+                                        <i class="bi bi-chat me-2"></i> کامنت ها
+                                    </a>
+                                </li>
 
                                 <li>
                                     <a class="dropdown-item text-danger"

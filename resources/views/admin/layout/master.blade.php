@@ -18,7 +18,7 @@
     <link href="{{ asset('admin/css/app.css') }}" rel="stylesheet">
     <link href="{{asset('admin/choises/choices.min.css')}}" rel="stylesheet" />
     <link href="{{asset('bootstrap/tagify.css')}}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{asset('admin/css/persianDatepicker-default.css')}}"/>
 
 
     @livewireStyles
@@ -126,6 +126,8 @@
     <script src="{{asset('admin/list/list.js')}}"></script>
     <script src="{{asset('admin/sweetalert/sweetalert.js')}}"></script>
     <script src="{{asset('bootstrap/tagify.js')}}"></script>
+
+    <script src="{{asset('admin/js/persianDatepicker.min.js')}}"></script>
     @livewireScripts
     <script>
 
@@ -218,6 +220,33 @@
             });
         });
 
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#persianDate').persianDatepicker({
+                format: 'YYYY/MM/DD',
+                autoClose: true,
+                observer: true,
+
+                position: 'auto',
+                toolbox: {
+                    calendarSwitch: { enabled: false }
+                },
+                altField: '#hiddenDate', // اختیاری
+                navigator: {
+                    enabled: true
+                },
+                // مهم‌ترین بخش:
+                initialValue: false,
+                calendar: {
+                    persian: {
+                        leapYearMode: 'astronomical'
+                    }
+                },
+                // موقعیت تقویم
+                placement: 'bottom' // یا 'top' یا 'auto'
+            });
+        });
     </script>
     @stack('scripts')
 

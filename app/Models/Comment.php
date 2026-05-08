@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    public $timestamps = true;
     protected $fillable = [
       'product_id',
       'name',
       'comment',
       'admin_response',
-      'status',
-
+      'status'
     ];
     protected $casts=[
       'status'=>CommentStatus::class,

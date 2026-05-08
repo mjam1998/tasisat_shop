@@ -48,23 +48,26 @@ Route::prefix('/admin')->group(function(){
          Route::get('/edit/{product}', [AdminProductController::class,'edit'])->name('admin.product.edit');
          Route::put('/update/{product}', [AdminProductController::class,'update'])->name('admin.product.update');
          Route::delete('/delete/{product}', [AdminProductController::class,'delete'])->name('admin.product.delete');
+
          Route::get('/excel/create', [AdminProductController::class,'excelCreate'])->name('admin.product.excel.create');
          Route::post('/excel/import', [AdminProductController::class,'excelImport'])->name('admin.product.excel.import');
          Route::get('/excel/template', [AdminProductController::class,'excelTemplate'])->name('admin.product.excel.template');
          Route::get('/excel/create-sub-product',[AdminProductController::class,'excelCreateSubProduct'])->name('admin.product.excel.create-sub-product');
          Route::post('/excel/import-sub-products', [AdminProductController::class, 'importSubProducts'])->name('products.import-sub-products');
          Route::get('/excel/sub-product-template', [AdminProductController::class, 'downloadSubProductTemplate'])->name('products.download-sub-product-template');
-       Route::put('subproduct/{subproduct}',
-           [AdminProductController::class,'updateSubProduct'])
-           ->name('admin.subproduct.update');
 
-       Route::delete('subproduct/{subproduct}',
-           [AdminProductController::class,'destroySubProduct'])
-           ->name('admin.subproduct.destroy');
+         Route::put('/subproduct/{subproduct}', [AdminProductController::class,'updateSubProduct'])->name('admin.subproduct.update');
+         Route::delete('/subproduct/{subproduct}', [AdminProductController::class,'destroySubProduct'])->name('admin.subproduct.destroy');
+         Route::get('/subproduct/{subproduct}/edit', [AdminProductController::class,'editSubProduct'])->name('admin.subproduct.edit');
+         Route::get('/subproduct/create/{product}', [AdminProductController::class,'createSubProduct'])->name('admin.subproduct.create');
+         Route::post('/subproduct/store/{product}', [AdminProductController::class,'storeSubProduct'])->name('admin.subproduct.store');
 
-       Route::get('subproduct/{subproduct}/edit',
-           [AdminProductController::class,'editSubProduct'])
-           ->name('admin.subproduct.edit');
+         Route::get('/comment/list/{product}', [AdminProductController::class,'commentList'])->name('admin.product.comment.list');
+         Route::get('/comment/create/{product}', [AdminProductController::class,'commentCreate'])->name('admin.product.comment.create');
+         Route::post('/comment/store/{product}', [AdminProductController::class,'commentStore'])->name('admin.product.comment.store');
+       Route::get('/comment/edit/{product}/{comment}', [AdminProductController::class,'commentEdit'])->name('admin.product.comment.edit');
+       Route::put('/comment/update/{product}/{comment}', [AdminProductController::class,'commentUpdate'])->name('admin.product.comment.update');
+       Route::delete('/comment/delete/{comment}', [AdminProductController::class,'commentDelete'])->name('admin.product.comment.delete');
    });
 
 
