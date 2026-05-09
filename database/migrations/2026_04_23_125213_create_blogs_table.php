@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image_title','400')->nullable();
             $table->string('meta_description','400')->nullable();
             $table->string('meta_title','400')->nullable();
+            $table->string('keywords','400')->nullable();
             $table->timestamps();
         });
     }

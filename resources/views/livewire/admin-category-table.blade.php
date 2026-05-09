@@ -34,7 +34,9 @@
             @forelse($categories as $category)
                 <tr>
 
-                    <td class="text-center">{{ $category->name }}</td>
+                    <td title="{{ $category->name }}">
+                        {{ \Illuminate\Support\Str::limit( $category->name, 25) }}
+                    </td>
                     <td class="text-center">{{ $category->slug }}</td>
                     <td class="text">
                         <div class="dropdown position-static">

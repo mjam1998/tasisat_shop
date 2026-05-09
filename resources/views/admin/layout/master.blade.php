@@ -63,6 +63,7 @@
 
                 </ul>
             </li>
+            <li><a href="{{route('admin.blog.index')}}"  ><i class="bi bi-layout-text-sidebar"></i> بلاگ</a></li>
 
 
 

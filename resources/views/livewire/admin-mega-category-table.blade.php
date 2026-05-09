@@ -34,7 +34,9 @@
             @forelse($megaCategories as $megaCategory)
                 <tr>
 
-                    <td class="text-center">{{ $megaCategory->name }}</td>
+                    <td title="{{ $megaCategory->name }}">
+                        {{ \Illuminate\Support\Str::limit( $megaCategory->name, 25) }}
+                    </td>
 
                     <td class="text">
                         <div class="dropdown position-static">

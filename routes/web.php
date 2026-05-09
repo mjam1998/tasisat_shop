@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminProductController;
@@ -69,7 +70,14 @@ Route::prefix('/admin')->group(function(){
        Route::put('/comment/update/{product}/{comment}', [AdminProductController::class,'commentUpdate'])->name('admin.product.comment.update');
        Route::delete('/comment/delete/{comment}', [AdminProductController::class,'commentDelete'])->name('admin.product.comment.delete');
    });
-
+   Route::prefix('/blog')->group(function(){
+       Route::get('/index', [AdminBlogController::class,'index'])->name('admin.blog.index');
+       Route::get('/create', [AdminBlogController::class,'create'])->name('admin.blog.create');
+       Route::post('/store', [AdminBlogController::class,'store'])->name('admin.blog.store');
+       Route::get('/edit/{blog}', [AdminBlogController::class,'edit'])->name('admin.blog.edit');
+       Route::put('/update/{blog}', [AdminBlogController::class,'update'])->name('admin.blog.update');
+       Route::delete('/delete/{blog}', [AdminBlogController::class,'delete'])->name('admin.blog.delete');
+   });
 
 });
 
