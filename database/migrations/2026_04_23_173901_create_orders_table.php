@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('send_method_id');
             $table->tinyInteger('status')->default(0);
             $table->string('name','255');
+            $table->string('code','20')->nullable()->unique();
             $table->string('mobile','15');
             $table->decimal('total_amount',15,0);
             $table->decimal('pay_amount',15,0);

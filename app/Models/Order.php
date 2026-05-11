@@ -9,6 +9,7 @@ class Order extends Model
 {
     protected $fillable = [
       'send_method_id',
+        'code',
       'status',
       'name',
       'mobile',

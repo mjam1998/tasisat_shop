@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +78,10 @@ Route::prefix('/admin')->group(function(){
        Route::get('/edit/{blog}', [AdminBlogController::class,'edit'])->name('admin.blog.edit');
        Route::put('/update/{blog}', [AdminBlogController::class,'update'])->name('admin.blog.update');
        Route::delete('/delete/{blog}', [AdminBlogController::class,'delete'])->name('admin.blog.delete');
+   });
+   Route::prefix('/order')->group(function(){
+     Route::get('/index', [AdminOrderController::class,'index'])->name('admin.order.index');
+     Route::get('/show/{order}', [AdminOrderController::class,'show'])->name('admin.order.show');
    });
 
 });
