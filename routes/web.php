@@ -82,6 +82,8 @@ Route::prefix('/admin')->group(function(){
    Route::prefix('/order')->group(function(){
      Route::get('/index', [AdminOrderController::class,'index'])->name('admin.order.index');
      Route::get('/show/{order}', [AdminOrderController::class,'show'])->name('admin.order.show');
+     Route::put('/update/{order}', [AdminOrderController::class,'update'])->name('admin.order.update');
+       Route::get('/{id}/invoice-pdf', [AdminOrderController::class, 'downloadInvoicePdf'])->name('admin.order.invoice-pdf');
    });
 
 });

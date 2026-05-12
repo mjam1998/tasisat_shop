@@ -1600,3 +1600,10 @@ body::-webkit-scrollbar-thumb:hover {
 .table-container::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
+.modal {
+    z-index: 2000 !important;
+}
+
+.modal-backdrop {
+    z-index: 1990 !important;
+}

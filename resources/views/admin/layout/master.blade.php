@@ -122,8 +122,9 @@
 
     </div>
     <!-- Bootstrap JS -->
-    <script src="{{asset('bootstrap/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('admin/select2/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{asset('bootstrap/bootstrap.bundle.min.js')}}"></script>
+
     <script src="{{asset('admin/choises/choices.min.js')}}"></script>
     <script src="{{asset('admin/list/list.js')}}"></script>
     <script src="{{asset('admin/sweetalert/sweetalert.js')}}"></script>

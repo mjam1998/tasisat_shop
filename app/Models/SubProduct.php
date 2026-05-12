@@ -11,6 +11,7 @@ class SubProduct extends Model
 
     protected $fillable = [
       'product_id',
+        'sub_product_id',
       'name',
       'price',
       'discount',
