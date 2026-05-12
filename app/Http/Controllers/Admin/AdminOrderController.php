@@ -269,7 +269,7 @@ class AdminOrderController extends Controller
             <td>' . number_format($item->price) . ' تومان</td>
             <td>' . number_format($item->discount ?? 0) . ' تومان</td>
             <td>' . $item->quantity . '</td>
-            <td>' . number_format($item->total_price) . ' تومان</td>
+            <td>' . number_format(($item->price * $item->quantity )-$item->discount) . ' تومان</td>
         </tr>';
         }
 
