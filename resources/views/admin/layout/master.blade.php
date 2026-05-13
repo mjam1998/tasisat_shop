@@ -65,7 +65,8 @@
             </li>
             <li><a href="{{route('admin.order.index')}}"  ><i class="bi bi-cart"></i> سفارشات</a></li>
             <li><a href="{{route('admin.blog.index')}}"  ><i class="bi bi-layout-text-sidebar"></i> بلاگ</a></li>
-
+            <li><a href="{{route('admin.send-method.index')}}"  ><i class="bi bi-truck"></i> روش ارسال</a></li>
+            <li><a href="{{route('admin.banners.index')}}"  ><i class="bi bi-image"></i> بنرها</a></li>
 
 
 

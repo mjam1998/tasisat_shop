@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminSendMethodController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -85,7 +87,20 @@ Route::prefix('/admin')->group(function(){
      Route::put('/update/{order}', [AdminOrderController::class,'update'])->name('admin.order.update');
        Route::get('/{id}/invoice-pdf', [AdminOrderController::class, 'downloadInvoicePdf'])->name('admin.order.invoice-pdf');
    });
+   Route::prefix('/banner')->group(function(){
+       Route::get('/index', [AdminBannerController::class, 'index'])->name('admin.banners.index');
+       Route::post('/store', [AdminBannerController::class, 'store'])->name('admin.banners.store');
+       Route::delete('/delete/{banner}', [AdminBannerController::class, 'destroy'])->name('admin.banners.destroy');
+   });
 
+   Route::prefix('/send-method')->group(function(){
+       Route::get('/index',[AdminSendMethodController::class,'index'])->name('admin.send-method.index');
+       Route::get('/create',[AdminSendMethodController::class,'create'])->name('admin.send-method.create');
+       Route::post('/store',[AdminSendMethodController::class,'store'])->name('admin.send-method.store');
+       Route::get('/edit/{send_method}', [AdminSendMethodController::class,'edit'])->name('admin.send-method.edit');
+       Route::put('/update/{send_method}', [AdminSendMethodController::class,'update'])->name('admin.send-method.update');
+       Route::delete('/delete/{send_method}', [AdminSendMethodController::class,'delete'])->name('admin.send-method.delete');
+   });
 });
 
 

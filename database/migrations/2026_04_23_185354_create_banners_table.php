@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('image',400);
             $table->string('image_alt',400)->nullable();
             $table->string('image_title',400)->nullable();
+            $table->string('url',500)->nullable();
             $table->timestamps();
         });
     }
