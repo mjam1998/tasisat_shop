@@ -48,7 +48,7 @@
     <div class="nav-menu">
         <ul>
             <li><a href="{{route('admin.index')}}"  ><i class="bi bi-house"></i> داشبورد</a></li>
-
+            <li><a href="{{route('admin.list')}}"  ><i class="bi bi-people"></i> ادمین ها</a></li>
             <li><a href="{{route('admin.mega-category.index')}}"  ><i class="bi bi-list-ul"></i> دسته بندی ها</a></li>
 
             <li class="has-submenu" >

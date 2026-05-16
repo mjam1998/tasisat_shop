@@ -15,6 +15,12 @@ Route::get('/', [homeController::class,'index'])->name('home');
  //admin
 Route::prefix('/admin')->group(function(){
    Route::get('/index', [adminController::class,'index'])->name('admin.index');
+   Route::get('/list/index', [adminController::class,'list'])->name('admin.list');
+   Route::get('/create', [adminController::class,'create'])->name('admin.create');
+   Route::post('/store', [adminController::class,'store'])->name('admin.store');
+   Route::get('/edit/{user}', [adminController::class,'edit'])->name('admin.edit');
+   Route::put('/update/{user}', [adminController::class,'update'])->name('admin.update');
+   Route::delete('/delete/{user}', [adminController::class,'delete'])->name('admin.delete');
 
    Route::prefix('/category')->group(function(){
       Route::prefix('/mega-category')->group(function(){
@@ -92,7 +98,6 @@ Route::prefix('/admin')->group(function(){
        Route::post('/store', [AdminBannerController::class, 'store'])->name('admin.banners.store');
        Route::delete('/delete/{banner}', [AdminBannerController::class, 'destroy'])->name('admin.banners.destroy');
    });
-
    Route::prefix('/send-method')->group(function(){
        Route::get('/index',[AdminSendMethodController::class,'index'])->name('admin.send-method.index');
        Route::get('/create',[AdminSendMethodController::class,'create'])->name('admin.send-method.create');
