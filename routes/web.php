@@ -106,6 +106,8 @@ Route::prefix('/admin')->group(function(){
        Route::put('/update/{send_method}', [AdminSendMethodController::class,'update'])->name('admin.send-method.update');
        Route::delete('/delete/{send_method}', [AdminSendMethodController::class,'delete'])->name('admin.send-method.delete');
    });
+    Route::post('/upload-image', [AdminBlogController::class, 'uploadImage'])->name('admin.upload.image');
+
 });
 
 

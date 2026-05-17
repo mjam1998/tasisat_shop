@@ -1,85 +1,73 @@
-@php
-    $editorId = $field ?? 'description';
-@endphp
+<textarea id="content" name="description" class="form-control">{{ old('content', $value ?? '') }}</textarea>
 
-<style>
-    .editor-toolbar{
-        border:1px solid #ddd;
-        padding:10px;
-        background:#f8f9fa;
-        margin-bottom:5px;
-        border-radius:6px;
-    }
-    .editor-toolbar button, .editor-toolbar select{
-        border:1px solid #ccc;
-        background:white;
-        padding:5px 10px;
-        margin-left:5px;
-        cursor:pointer;
-        border-radius:4px;
-    }
-    .editor-box{
-        border:1px solid #ddd;
-        min-height:260px;
-        padding:15px;
-        background:white;
-        border-radius:6px;
-        overflow:auto;
-    }
-</style>
-
-<div class="editor-toolbar">
-
-    <button type="button" onclick="format('bold')"><b>B</b></button>
-    <button type="button" onclick="format('italic')"><i>I</i></button>
-    <button type="button" onclick="format('underline')"><u>U</u></button>
-
-    <select onchange="fontSize(this.value)">
-        <option value="">سایز فونت</option>
-        <option value="1">کوچک</option>
-        <option value="3">معمولی</option>
-        <option value="5">بزرگ</option>
-        <option value="7">خیلی بزرگ</option>
-    </select>
-
-    <button type="button" onclick="format('insertUnorderedList')">• لیست</button>
-
-    <button type="button" onclick="addLink()">لینک</button>
-
-</div>
-
-<div id="editor_{{ $editorId }}"
-     contenteditable="true"
-     class="editor-box">{!! $value !!}</div>
-
-
-<textarea name="{{ $editorId }}"
-          id="{{ $editorId }}"
-          hidden></textarea>
-
-
+<script src="{{ asset('tinymce/tinymce.js') }}"></script>
 <script>
-    function format(cmd){
-        document.execCommand(cmd,false,null);
-    }
+    tinymce.init({
+        selector: '#content',
+        plugins: 'image link table code lists directionality advlist autolink charmap preview anchor searchreplace visualblocks fullscreen insertdatetime media wordcount',
+        toolbar: 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table | removeformat code | ltr rtl',
+        directionality: 'rtl',
+        language: 'fa',
+        height: 500,
+        menubar: true,
+        branding: false,
 
-    function fontSize(size){
-        document.execCommand("fontSize",false,size);
-    }
+        relative_urls: false,
+        remove_script_host: false,
+        convert_urls: true,
 
-    function addLink(){
-        let url = prompt("آدرس لینک را وارد کنید:");
-        if(url){
-            document.execCommand("createLink",false,url);
-        }
-    }
+        // تنظیمات آپلود تصویر
+        images_upload_url: '{{ route("admin.upload.image") }}',
+        automatic_uploads: true,
+        images_upload_handler: function (blobInfo, progress) {
+            return new Promise(function(resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = false;
+                xhr.open('POST', '{{ route("admin.upload.image") }}');
+                xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
 
-    // انتقال متن ادیتور به textarea
-    document.querySelector("form").addEventListener("submit", function () {
+                xhr.upload.onprogress = function(e) {
+                    progress(e.loaded / e.total * 100);
+                };
 
-        document.getElementById("{{ $editorId }}").value =
-            document.getElementById("editor_{{ $editorId }}").innerHTML;
+                xhr.onload = function() {
+                    if (xhr.status === 403) {
+                        reject('خطای دسترسی: ' + xhr.status);
+                        return;
+                    }
 
+                    if (xhr.status < 200 || xhr.status >= 300) {
+                        reject('خطا در آپلود: ' + xhr.status);
+                        return;
+                    }
+
+                    var json = JSON.parse(xhr.responseText);
+
+                    if (!json || typeof json.location != 'string') {
+                        reject('خطا: پاسخ نامعتبر از سرور');
+                        return;
+                    }
+
+                    resolve(json.location);
+                };
+
+                xhr.onerror = function() {
+                    reject('خطا در ارتباط با سرور');
+                };
+
+                var formData = new FormData();
+                formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                xhr.send(formData);
+            });
+        },
+
+        // تنظیمات جدول
+        table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+        table_appearance_options: true,
+        table_grid: true,
+        table_resize_bars: true,
+
+        content_style: 'body { font-family: Vazir, Tahoma, Arial; font-size: 14px; direction: rtl; }'
     });
 </script>
-

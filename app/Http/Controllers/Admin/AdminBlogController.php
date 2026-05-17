@@ -141,4 +141,23 @@ class AdminBlogController extends Controller
 
         return back()->with('success', 'بلاگ با موفقیت حذف شد.');
     }
+    public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:4048'
+        ]);
+
+        if ($request->hasFile('file')) {
+            $image = $request->file('file');
+            $filename = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('images', $filename, 'public');
+
+            return response()->json([
+                'location' => asset( $path)
+            ]);
+        }
+
+        return response()->json(['error' => 'خطا در آپلود تصویر'], 400);
+    }
+
 }
