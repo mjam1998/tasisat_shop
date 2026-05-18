@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="control-label required">نوع کاربر</label>
+                            <label class="control-label required"> گیرنده پیامک</label>
                             <select class="form-select mt-2" name="type" required>
                                 <option value="">انتخاب کنید..</option>
                                 @foreach($userTypes as $userType)

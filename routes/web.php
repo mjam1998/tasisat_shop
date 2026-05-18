@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminBlogController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminExtraPageController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminSendMethodController;
@@ -107,8 +108,14 @@ Route::prefix('/admin')->group(function(){
        Route::delete('/delete/{send_method}', [AdminSendMethodController::class,'delete'])->name('admin.send-method.delete');
    });
     Route::post('/upload-image', [AdminBlogController::class, 'uploadImage'])->name('admin.upload.image');
+    Route::prefix('/extra-page')->group(function(){
+        Route::get('/index', [AdminExtraPageController::class,'index'])->name('admin.extra.page.index');
+        Route::get('/create', [AdminExtraPageController::class,'create'])->name('admin.extra.page.create');
+        Route::post('/store', [AdminExtraPageController::class,'store'])->name('admin.extra.page.store');
+        Route::get('/edit/{page}', [AdminExtraPageController::class,'edit'])->name('admin.extra.page.edit');
+        Route::put('/update/{page}', [AdminExtraPageController::class,'update'])->name('admin.extra.page.update');
+        Route::delete('/delete/{page}', [AdminExtraPageController::class,'delete'])->name('admin.extra.page.delete');
+    });
 
 });
-
-
 //endAdmin
