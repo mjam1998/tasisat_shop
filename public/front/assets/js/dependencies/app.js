@@ -283,28 +283,7 @@ function updateCartUI() {
 
     let total = 0;
 
-    // Manage empty cart state
-    if (rows.length === 0) {
-        emptyMsg.classList.replace('hidden', 'flex');
-        itemsList.classList.add('hidden');
-        cartFooter.classList.add('hidden');
-        if (headerCount) headerCount.textContent = `(۰ کالا)`;
-        if (badgeCount) badgeCount.textContent = '۰';
-    } else {
-        emptyMsg.classList.replace('flex', 'hidden');
-        itemsList.classList.remove('hidden');
-        cartFooter.classList.remove('hidden');
 
-        // Calculate total price
-        rows.forEach(row => {
-            const price = parseInt(row.querySelector('.unit-price').dataset.price);
-            const count = parseInt(row.querySelector('.item-count').textContent);
-            total += price * count;
-        });
-
-        if (headerCount) headerCount.textContent = `(${rows.length} کالا)`;
-        if (badgeCount) badgeCount.textContent = rows.length;
-    }
 
     // Display formatted total price
     const priceDisplay = document.getElementById('total-price-display');
@@ -1942,7 +1921,7 @@ function initTicketChat() {
             <div class="flex flex-col ${isUser ? 'items-end' : 'items-start'} gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div class="${isUser
             ? 'bg-primary-500 text-white rounded-tl-none shadow-lg shadow-primary-500/20'
-            : 'bg-white/50 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 text-gray-700 dark:text-gray-300 rounded-tr-none'} 
+            : 'bg-white/50 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 text-gray-700 dark:text-gray-300 rounded-tr-none'}
                     p-4 rounded-[1.5rem] max-w-[85%]">
                     <p class="text-[11px] font-bold leading-6">${text}</p>
                 </div>
@@ -2224,31 +2203,46 @@ const categorySwiper = new Swiper('.categorySwiper', {
 const filterBtns = document.querySelectorAll('.category-filter-btn');
 const slides = document.querySelectorAll('.categorySwiper .swiper-slide');
 
-filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const category = btn.dataset.category;
-        
-        // Update active button
-        filterBtns.forEach(b => {
-            b.classList.remove('active', 'bg-blue-600', 'text-white');
-            b.classList.add('bg-gray-200', 'text-gray-700');
-        });
-        btn.classList.add('active', 'bg-blue-600', 'text-white');
-        btn.classList.remove('bg-gray-200', 'text-gray-700');
-        
-        // Filter slides
-        slides.forEach(slide => {
-            if (category === 'all' || slide.dataset.category === category) {
-                slide.style.display = 'block';
-            } else {
-                slide.style.display = 'none';
-            }
-        });
-        
+function applyFilter(category) {
+    // Update active button
+    filterBtns.forEach(b => {
+        b.classList.remove('active', 'bg-blue-600', 'text-white');
+        b.classList.add('bg-gray-200', 'text-gray-700');
+    });
+
+    const activeBtn = document.querySelector(`.category-filter-btn[data-category="${category}"]`);
+    if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-blue-600', 'text-white');
+        activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+    }
+
+    // Filter slides
+    slides.forEach(slide => {
+        if (category === 'all' || slide.dataset.category === category) {
+            slide.style.display = 'block';
+        } else {
+            slide.style.display = 'none';
+        }
+    });
+
+    if (typeof categorySwiper !== 'undefined') {
         categorySwiper.update();
         categorySwiper.slideTo(0);
+    }
+}
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        applyFilter(btn.dataset.category);
     });
 });
+
+// اجرای اولیه هنگام لود صفحه
+const firstActiveBtn = document.querySelector('.category-filter-btn.active');
+if (firstActiveBtn) {
+    applyFilter(firstActiveBtn.dataset.category);
+}
+
 
 
 // Make global functions available

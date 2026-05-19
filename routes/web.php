@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\AdminExtraPageController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminSendMethodController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Front\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeController::class,'index'])->name('home');

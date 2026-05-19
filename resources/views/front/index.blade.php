@@ -9,16 +9,20 @@
 
                 <div class="swiper mainHeroSwiper h-full min-h-[300px] sm:min-h-[400px] lg:min-h-[500px]" >
                     <div class="swiper-wrapper" >
-                        <div class="swiper-slide relative">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                            <img src="../front/assets/images/slider/slide2-2.jpg" alt="Banner" class="w-full h-full object-cover">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="../front/assets/images/slider/slide3-1.jpg" alt="Banner" class="w-full h-full object-cover">
-                        </div>
-                        <div class="swiper-slide">
-                            <img src="../front/assets/images/slider/slide4.jpg" alt="Banner" class="w-full h-full object-cover">
-                        </div>
+                        @foreach($sliders as $slider)
+                            <div class="swiper-slide relative">
+                                <!-- اضافه شدن pointer-events-none -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-10"></div>
+
+                                <!-- اضافه شدن کلاس‌ها برای پر کردن کل فضای اسلاید -->
+                                <a href="{{$slider->url}}" class="block w-full h-full relative z-20">
+                                    <img src="{{asset('banners/'.$slider->image)}}" alt="{{$slider->image_alt}}" title="{{$slider->image_title}}" class="w-full h-full object-cover">
+                                </a>
+                            </div>
+                        @endforeach
+
+
+
                     </div>
                     <div class="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 flex gap-2 sm:gap-3 z-10">
                         <div class="swiper-button-prev-custom w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center cursor-pointer hover:bg-white hover:text-blue-600 transition-all">
@@ -54,10 +58,10 @@
                         </div>
                     </div>
                     <div>
-                        <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">دسته‌بندی‌های محبوب</h2>
+                        <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">دسته‌بندی‌ها</h2>
                         <p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mt-2 flex items-center gap-2">
                             <span class="w-8 h-[2px] bg-blue-500/30"></span>
-                            Popular Categories
+                            Categories
                         </p>
                     </div>
                 </div>
@@ -73,188 +77,55 @@
             </div>
             <!-- Filter Buttons -->
             <div class="flex gap-3 mb-6 overflow-x-auto pb-2">
-                <button class="category-filter-btn active px-4 py-2 rounded-lg bg-blue-600 text-white whitespace-nowrap" data-category="all">
-                    همه
-                </button>
-                <button class="category-filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 whitespace-nowrap" data-category="mobile">
-                    گوشی موبایل
-                </button>
-                <button class="category-filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 whitespace-nowrap" data-category="laptop">
-                    لپ‌تاپ
-                </button>
-                <button class="category-filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 whitespace-nowrap" data-category="tablet">
-                    تبلت
-                </button>
-                <button class="category-filter-btn px-4 py-2 rounded-lg bg-gray-200 text-gray-700 whitespace-nowrap" data-category="accessories">
-                    لوازم جانبی
-                </button>
+                @foreach($superCategories as $index=>$superCategory)
+                    <button
+                        class="category-filter-btn px-4 py-2 rounded-lg whitespace-nowrap
+    {{ $index === 0 ? 'active bg-blue-600 text-white' : 'bg-gray-200 text-gray-700' }}"
+                        data-category="{{$superCategory->id}}">
+                        {{$superCategory->name}}
+                    </button>
+
+                @endforeach
+
             </div>
             <!-- Category Slider -->
-            <div class="swiper categorySwiper !overflow-visible">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1 - گوشی موبایل -->
-                    <div class="swiper-slide h-auto p-2" data-category="mobile">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">محبوب</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="گوشی موبایل">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">گوشی موبایل</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۱۲۰+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
 
-                    <!-- Slide 2 - لپ تاپ -->
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">پرفروش</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="لپ تاپ">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">لپ تاپ</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۸۵+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                <div class="swiper categorySwiper !overflow-visible">
+                    <div class="swiper-wrapper">
+                        <!-- Slide 1 - گوشی موبایل -->
+                        @foreach($superCategories as $superCategory)
+                            @foreach($superCategory->categories as $category)
+                                <div class="swiper-slide h-auto p-2" data-category="{{$superCategory->id}}">
+                                    <a href="#">
+                                        <div class="group relative h-full pt-10">
+                                            <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
+                                            <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
 
-                    <!-- Slide 3 - تبلت -->
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">جدید</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="تبلت">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">تبلت</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۶۰+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                                                <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
+                                                    <img src="{{asset('category/'.$category->image)}}" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="{{$category->image_alt}}" title="{{$category->image_title}}">
+                                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                </div>
+                                                <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7"> {{$category->name}}</h3>
+                                                <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
 
-                    <!-- Slide 4 - هدفون -->
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">ویژه</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="هدفون">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">هدفون</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۴۵+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
+                                                    <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            @endforeach
 
-                    <!-- Slide 5 - ساعت هوشمند -->
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">محبوب</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="ساعت هوشمند">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">ساعت هوشمند</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۷۰+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                        @endforeach
 
-                    <!-- Slide 6 - دوربین -->
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="#">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">حرفه‌ای</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/category/mobile.png" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="دوربین">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <h3 class="text-[18px] font-black text-gray-800 dark:text-gray-100 mb-6 leading-7">دوربین</h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">۳۵+ محصول</span>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
                     </div>
                 </div>
-            </div>
+
+
 
             <!-- Navigation Buttons -->
             <div class="flex justify-center gap-6 mt-12">

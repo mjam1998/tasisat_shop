@@ -23,6 +23,7 @@
 </div>
 <!-- END NEON LIGHT -->
 <!-- HEADER -->
+
 <header class="glass-header sticky top-0 z-50 border-b drop-shadow border-gray-200/50 dark:border-gray-800/50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl transition-all duration-300">
 
     <div class="container">
@@ -39,7 +40,7 @@
                     </svg>
                 </button>
                 <a href="index.html" class="flex items-center gap-2 group">
-                    <img src="../front/assets/images/logo.png" class="w-30" alt="">
+                    <img src="{{asset('front/assets/images/logo.png')}}" class="w-30" alt="">
                 </a>
             </div>
             <!-- Search -->
@@ -79,14 +80,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                     </svg>
                 </button>
-                <div class="relative group">
-                    <button id="login-btn" class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200/50 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-md hover:border-primary-500/50 hover:bg-primary-50/50 dark:hover:bg-primary-500/10 transition-all duration-300 group shadow-sm">
-                        <svg class="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                        </svg>
-                        <span class="text-xs font-black text-gray-700 dark:text-gray-200 hidden lg:block uppercase tracking-tighter">ورود یا ثبت‌نام</span>
-                    </button>
-                </div>
+
                 <button id="cart-btn" class="relative p-2.5 rounded-xl border border-secondary-500/20 bg-secondary-500/10 dark:bg-secondary-500/20 backdrop-blur-md hover:bg-secondary-500 hover:text-white transition-all duration-300 group shadow-lg shadow-secondary-500/10">
                     <svg class="w-6 h-6 text-secondary-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
@@ -113,319 +107,69 @@
                             <div class="w-64 border-l border-gray-100 dark:border-[var(--color-primary-900)] py-2 overflow-y-auto bg-gray-50/80 dark:bg-[var(--color-primary-900)]/30">
                                 <ul class="flex flex-col">
                                     <!--Digital goods-->
-                                    <li class="mega-tab-item active group/tab" data-target="dk-digital">
-                                        <a href="#" class="flex items-center gap-3 px-6 py-4 text-[13px] font-bold text-gray-600 dark:text-gray-400 group-[.active]/tab:bg-white dark:group-[.active]/tab:bg-[var(--color-primary-950)] group-[.active]/tab:text-[var(--color-primary-600)] dark:group-[.active]/tab:text-[var(--color-primary-400)] transition-all">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                            </svg>
-                                            کالای دیجیتال
+                                    @php
+                                    $megaCategories=\App\Models\MegaCategory::all();
+                                     @endphp
+                                    @foreach($megaCategories as $index => $megaCategory)
+                                        <li class="mega-tab-item {{ $index === 0 ? 'active' : '' }} group/tab"
+                                            data-target="{{$megaCategory->id}}">
+                                            <a href="#" class="flex items-center gap-3 px-6 py-4 text-[13px] font-bold text-gray-600 dark:text-gray-400 group-[.active]/tab:bg-white dark:group-[.active]/tab:bg-[var(--color-primary-950)] group-[.active]/tab:text-[var(--color-primary-600)] dark:group-[.active]/tab:text-[var(--color-primary-400)] transition-all">
+                                                {{$megaCategory->name}}
+                                            </a>
+                                        </li>
+                                    @endforeach
 
-                                        </a>
-                                    </li>
-                                    <!--Home and kitchen-->
 
                                 </ul>
                             </div>
                             <div class="flex-1 p-8 overflow-y-auto custom-scrollbar bg-white dark:bg-[var(--color-primary-950)]">
-                                <!--Digital goods-->
-                                <div id="dk-digital" class="mega-tab-content">
-                                    <div class="flex items-center justify-between mb-8">
-                                        <a href="#" class="flex items-center gap-1 text-[14px] font-black text-gray-900 dark:text-white hover:text-[var(--color-primary-500)]">
-                                            مشاهده تمام محصولات کالای دیجیتال
-
-                                            <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path d="M9 5l7 7-7 7" stroke-width="3"/>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                    <div class="grid grid-cols-4 gap-x-6 gap-y-10">
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                                </svg>
-                                                موبایل
-
+                                @foreach($megaCategories as $index => $megaCategory)
+                                    <div id="{{$megaCategory->id}}"
+                                         class="mega-tab-content {{ $index === 0 ? '' : 'hidden' }}">
+                                        <div class="flex items-center justify-between mb-8">
+                                            <a href="#" class="flex items-center gap-1 text-[14px] font-black text-gray-900 dark:text-white hover:text-[var(--color-primary-500)]">
+                                                تمام محصولات {{$megaCategory->name}}
                                             </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">گوشی‌های هوشمند</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">برند اپل (iPhone)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">برند سامسونگ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">برند شیائومی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">گوشی‌های میان‌رده</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">گوشی‌های اقتصادی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">گوشی‌های گیمینگ</a>
-                                                </li>
-                                            </ul>
                                         </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                                </svg>
-                                                لپ‌تاپ
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">لپ‌تاپ‌های گیمینگ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">مک‌بوک‌های اپل</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">لپ‌تاپ‌های تجاری</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">لپ‌تاپ‌های دانشجویی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">لپ‌تاپ‌های فوق سبک</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                                                </svg>
-                                                هدفون و ساعت
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">هندزفری بی‌سیم</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">ساعت‌های هوشمند</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">هدفون‌های گیمینگ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">اسپیکر و سیستم صوتی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">مچ‌بند سلامت</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">هدفون‌های نویزکنسلینگ</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                                </svg>
-                                                لوازم جانبی
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کابل و شارژر</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">پاوربانک (شارژر همراه)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کیف و کاور</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">پایه موبایل و لپ‌تاپ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">محافظ صفحه نمایش</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
-                                                </svg>
-                                                ذخیره‌سازی
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">هارد اکسترنال</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">فلش مموری</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کارت حافظه</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">هارد SSD</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">درایوهای NAS</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                                </svg>
-                                                دوربین
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">دوربین عکاسی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">لنز و لوازم حرفه‌ای</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">دوربین فیلمبرداری</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">دوربین‌های اکشن</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">دوربین‌های مداربسته</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                                                </svg>
-                                                کامپیوتر و قطعات
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کارت گرافیک</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">پردازنده (CPU)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">مادربورد</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">رم (RAM)</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">مانیتور و نمایشگر</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کیبورد و موس</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="space-y-4">
-                                            <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                                </svg>
-                                                گیمینگ
-
-                                            </a>
-                                            <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کنسول بازی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">دسته بازی</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">صندلی گیمینگ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">میز گیمینگ</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="hover:text-[var(--color-primary-500)]">کارت گرافیک گیمینگ</a>
-                                                </li>
-                                            </ul>
+                                        <div class="grid grid-cols-4 gap-x-6 gap-y-10">
+                                            @foreach($megaCategory->superCategories as $superCategory)
+                                                <div class="space-y-4">
+                                                    <a href="#" class="flex items-center gap-2 text-[14px] font-black text-gray-900 dark:text-white border-r-2 border-[var(--color-primary-500)] pr-3">
+                                                        {{$superCategory->name}}
+                                                    </a>
+                                                    <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
+                                                        @foreach($superCategory->categories as $category)
+                                                            <li>
+                                                                <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">{{$category->name}}</a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
+
+
 
                             </div>
                         </div>
                     </div>
                 </li>
 
-                <li class="relative group/drop">
-                    <button class="flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors py-4 w-full lg:w-auto">
-                        منوی آبشاری
-
-                        <svg class="w-4 h-4 transition-transform group-hover/drop:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <ul class="lg:absolute lg:top-full lg:right-0 w-full lg:w-64 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xl lg:rounded-2xl py-2 opacity-0 invisible group-hover/drop:opacity-100 group-hover/drop:visible lg:transform lg:translate-y-2 lg:group-hover/drop:translate-y-0 transition-all duration-300 z-50 hidden lg:block mobile-menu-content">
-                        <li class="relative p-2 group/subdrop">
-                            <a href="#" class="flex rounded items-center justify-between px-4 py-3 text-xs text-gray-600 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 transition-colors">
-                                        <span class="flex items-center gap-3">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" stroke-width="2"/>
-                                            </svg>
-                                            واحد پشتیبانی
-
-                                        </span>
-                                <svg class="w-3 h-3 lg:block hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
-                                </svg>
-                            </a>
-                            <ul class="lg:absolute lg:right-full lg:top-0 w-full lg:w-56 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-xl lg:rounded-2xl py-2 opacity-0 invisible group-hover/subdrop:opacity-100 group-hover/subdrop:visible lg:transform lg:translate-x-2 lg:group-hover/subdrop:translate-x-0 transition-all duration-300 hidden lg:block">
-                                <li>
-                                    <a href="#" class="block px-4 py-2 text-[11px] hover:text-primary-500 dark:text-gray-400">تماس با اپراتور</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="block px-4 py-2 text-[11px] hover:text-primary-500 dark:text-gray-400">ارسال تیکت</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="block px-4 py-2 text-[11px] hover:text-primary-500 dark:text-gray-400">چت آنلاین</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="p-2">
-                            <a href="#" class="flex rounded items-center gap-3 px-4 py-3 text-xs text-gray-600 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/>
-                                </svg>
-                                سوالات متداول
-
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-1 transition-colors group">
-                        <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse group-hover:scale-125 transition-transform"></span>
-                        شگفت‌انگیزها
-
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">پرفروش‌ترین‌ها</a>
-                </li>
                 <li>
                     <a href="#" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">وبلاگ</a>
                 </li>
+
+                @php
+                $pages=\App\Models\Page::all();
+                @endphp
+                @foreach($pages as $page)
+                    <li>
+                        <a href="#" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">{{$page->title}}</a>
+                    </li>
+                @endforeach
+
 
             </ul>
         </div>
@@ -763,26 +507,8 @@
                 </svg>
             </button>
         </div>
-        <div class="flex-1 overflow-y-auto custom-scrollbar pt-2">
-            <div class="px-4 mb-6">
-                <div onclick="openLoginModal()" class="p-4 rounded-[2rem] bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-500/20 flex items-center justify-between cursor-pointer group transition-all active:scale-95">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <span class="block font-black text-sm">ورود یا ثبت‌نام</span>
-                            <span class="block text-[10px] opacity-70 mt-0.5">مشاهده پنل کاربری</span>
-                        </div>
-                    </div>
-                    <svg class="w-5 h-5 opacity-50 group-hover:translate-x-[-5px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M15 19l-7-7 7-7" stroke-width="3"/>
-                    </svg>
-                </div>
-            </div>
-            <nav class="px-3 pb-20">
+
+            <nav class="px-3 pb-20 mt-3">
                 <!--Product classification-->
                 <div class="flex items-center gap-2 px-3 mb-3">
                     <span class="w-1 h-4 bg-blue-600 rounded-full"></span>
@@ -790,141 +516,44 @@
                 </div>
                 <ul class="space-y-3">
                     <!--Digital goods-->
-                    <li class="menu-item">
-                        <button class="layer-btn w-full flex items-center justify-between p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-sm transition-all hover:bg-white/60">
-                            <div class="flex items-center gap-3 text-gray-800 dark:text-gray-200">
-                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="1.5"/>
-                                </svg>
-                                <span class="font-black text-sm">کالای دیجیتال</span>
-                            </div>
-                            <svg class="w-4 h-4 text-gray-400 arrow-icon transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 9l-7 7-7-7" stroke-width="3"/>
-                            </svg>
-                        </button>
-                        <ul class="hidden submenu mt-2 mr-2 space-y-2 border-r-2 border-blue-500/20 pr-2 overflow-hidden transition-all duration-300">
-                            <li>
-                                <button class="layer-btn w-full flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
-                                    <span class="font-bold text-xs text-gray-700 dark:text-gray-300">گوشی موبایل</span>
-                                    <svg class="w-3 h-3 text-gray-400 arrow-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path d="M19 9l-7 7-7-7" stroke-width="3"/>
-                                    </svg>
-                                </button>
-                                <ul class="hidden submenu mt-2 mr-2 space-y-2 border-r-2 border-gray-400/20 pr-2">
+                    @foreach($megaCategories as $megaCategory)
+                        <li class="menu-item">
+                            <button class="layer-btn w-full flex items-center justify-between p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-sm transition-all hover:bg-white/60">
+                                <div class="flex items-center gap-3 text-gray-800 dark:text-gray-200">
+
+                                    <span class="font-black text-sm">{{$megaCategory->name}}</span>
+                                </div>
+
+                            </button>
+                            <ul class="hidden submenu mt-2 mr-2 space-y-2 border-r-2 border-blue-500/20 pr-2 overflow-hidden transition-all duration-300">
+                             @foreach($megaCategory->superCategories as $superCategory)
                                     <li>
-                                        <button class="layer-btn w-full flex items-center justify-between p-2 rounded-lg bg-white/20 dark:bg-white/5 text-gray-600 dark:text-gray-400">
-                                            <span class="font-bold text-[11px]">گوشی اپل (iPhone)</span>
-                                            <svg class="w-3 h-3 text-gray-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <button class="layer-btn w-full flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
+                                            <span class="font-bold text-xs text-gray-700 dark:text-gray-300">{{$superCategory->name}}</span>
+                                            <svg class="w-3 h-3 text-gray-400 arrow-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path d="M19 9l-7 7-7-7" stroke-width="3"/>
                                             </svg>
                                         </button>
-                                        <ul class="hidden submenu mt-1 mr-2 space-y-1 pr-4 bg-gray-50/50 dark:bg-black/20 rounded-lg">
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری iPhone 15</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری iPhone 14</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری iPhone 13</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری iPhone 12</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری iPhone SE</a>
-                                            </li>
+                                        <ul class="hidden submenu mt-2 mr-2 space-y-2 border-r-2 border-gray-400/20 pr-2">
+
+
+                                           @foreach($superCategory->categories as $category)
+                                                <li>
+                                                    <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors"> {{$category->name}}</a>
+                                                </li>
+                                           @endforeach
+
+
                                         </ul>
                                     </li>
-                                    <li>
-                                        <button class="layer-btn w-full flex items-center justify-between p-2 rounded-lg bg-white/20 dark:bg-white/5 text-gray-600 dark:text-gray-400">
-                                            <span class="font-bold text-[11px]">گوشی سامسونگ</span>
-                                            <svg class="w-3 h-3 text-gray-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path d="M19 9l-7 7-7-7" stroke-width="3"/>
-                                            </svg>
-                                        </button>
-                                        <ul class="hidden submenu mt-1 mr-2 space-y-1 pr-4 bg-gray-50/50 dark:bg-black/20 rounded-lg">
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری Galaxy S</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری Galaxy A</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block p-3 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">سری Galaxy Z</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">گوشی شیائومی</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">گوشی هوآوی</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">گوشی انارد</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <button class="layer-btn w-full flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
-                                    <span class="font-bold text-xs text-gray-700 dark:text-gray-300">لپ‌تاپ و کامپیوتر</span>
-                                    <svg class="w-3 h-3 text-gray-400 arrow-icon transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path d="M19 9l-7 7-7-7" stroke-width="3"/>
-                                    </svg>
-                                </button>
-                                <ul class="hidden submenu mt-2 mr-2 space-y-2 border-r-2 border-gray-400/20 pr-2">
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">لپ‌تاپ گیمینگ</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">لپ‌تاپ تجاری</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">مک‌بوک اپل</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors">قطعات کامپیوتر</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
-                                    <span class="font-bold text-xs text-gray-700 dark:text-gray-300">هدفون و هندزفری</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
-                                    <span class="font-bold text-xs text-gray-700 dark:text-gray-300">ساعت هوشمند</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="flex items-center justify-between p-3 rounded-xl bg-white/30 dark:bg-white/5 border border-white/40 hover:bg-blue-50/50">
-                                    <span class="font-bold text-xs text-gray-700 dark:text-gray-300">کنسول بازی</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                             @endforeach
 
-                    <!--The amazing-->
-                    <li>
-                        <a href="#" class="flex items-center gap-3 p-4 rounded-2xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-sm text-gray-800 dark:text-gray-200 font-black text-sm">
-                            <svg class="w-5 h-5 text-secondary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="1.5"/>
-                            </svg>
-                            شگفت‌انگیزها
+                            </ul>
+                        </li>
+                    @endforeach
 
-                        </a>
-                    </li>
-                    <!--Special sale-->
-                    <li>
-                        <a href="#" class="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-red-500 to-secondary-500 text-white shadow-lg shadow-red-500/20">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke-width="1.5"/>
-                            </svg>
-                            <span class="font-black text-sm">فروش ویژه</span>
-                        </a>
-                    </li>
+
+
                 </ul>
                 <!--Customer service-->
                 <div class="flex items-center gap-2 px-3 mt-8 mb-3">
