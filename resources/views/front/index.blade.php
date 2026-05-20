@@ -147,7 +147,6 @@
 
 
     <!-- AMAZING SECTION -->
-    <!-- AMAZING SECTION -->
     <section class="amazing-deals-section relative overflow-hidden transition-colors duration-500">
         <div class="container pb-4 relative z-10">
 
@@ -188,16 +187,14 @@
             </div>
 
             <!-- Replace slider with banner -->
-            <div class="rounded-[3rem] overflow-hidden shadow-2xl border border-white/40 dark:border-white/10">
-                <img src="../front/assets/images/banner/banner-11.jpg" class="w-full h-64 md:h-80 lg:h-96 object-cover" alt="Amazing Offer Banner">
-            </div>
+            <a href="{{$discountBanner->url}}" class="block rounded-[3rem] overflow-hidden shadow-2xl border border-white/40 dark:border-white/10 transition-transform duration-300 hover:scale-[1.02]">
+                <img src="{{asset('banners/'.$discountBanner->image)}}" class="w-full h-64 md:h-80 lg:h-96 object-cover" alt="{{$discountBanner->image_alt}}" title="{{$discountBanner->image_title}}">
+            </a>
 
 
 
         </div>
     </section>
-    <!-- END AMAZING SECTION -->
-
     <!-- END AMAZING SECTION -->
 
 
@@ -215,10 +212,10 @@
                         </div>
                     </div>
                     <div>
-                        <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">مجله مانا</h2>
+                        <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight"> بلاگ</h2>
                         <p class="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mt-2 flex items-center gap-2">
                             <span class="w-8 h-[2px] bg-blue-500/30"></span>
-                            Latest Tech News
+                           Blogs
 
                         </p>
                     </div>
@@ -235,228 +232,39 @@
             </div>
             <div class="swiper magazineSwiper !overflow-visible">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-1.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
+                    @foreach($blogs as $blog)
+                        <div class="swiper-slide h-auto p-4">
+                            <a href="">
+                                <div class="group relative h-full pt-10">
+                                    <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
+                                    <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
+
+                                        <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
+                                            <img src="{{'blog/'.$blog->image}}" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="{{$blog->image_alt}}" title="{{$blog->image_title}}">
+                                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                         </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
+                                        <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
+
+                                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                            <span class="tabular-nums">{{ \Morilog\Jalali\Jalalian::fromDateTime($blog->created_at)->format('Y/m/d') }}</span>
+                                        </div>
+                                        <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">{{$blog->title}}
+                                        </h3>
+                                        <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
+
+                                            <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-2.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
-                                        </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-3.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
-                                        </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-4.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
-                                        </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-5.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
-                                        </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide h-auto p-4">
-                        <a href="">
-                            <div class="group relative h-full pt-10">
-                                <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
-                                <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">
-                                    <div class="absolute -top-4 -right-2 z-20">
-                                        <div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-lg shadow-blue-500/30">تکنولوژی</div>
-                                    </div>
-                                    <div class="relative mb-6 overflow-hidden rounded-[2rem] h-48 shadow-lg">
-                                        <img src="../front/assets/images/blog/blog-6.jpg" class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110" alt="Blog Title">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    </div>
-                                    <div class="flex items-center gap-4 mb-4 text-[11px] font-bold text-gray-400">
-                                                <span class="flex items-center gap-1.5">
-                                                    <i class="far fa-clock text-blue-500"></i>
-                                                    ۵ دقیقه مطالعه
-                                                </span>
-                                        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span class="tabular-nums">۱۴۰۲/۱۰/۰۷</span>
-                                    </div>
-                                    <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 mb-6 line-clamp-2 leading-7 h-14 group-hover:text-blue-600 transition-colors">بررسی تخصصی آیفون ۱۵ پرو مکس؛ پادشاه جدید دنیای عکاسی
-                                    </h3>
-                                    <div class="flex items-center justify-between mt-auto pt-5 border-t border-gray-100 dark:border-white/5">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 font-black text-[10px]">م</div>
-                                            <span class="text-[12px] font-bold text-gray-600 dark:text-gray-400">تحریریه مانا</span>
-                                        </div>
-                                        <div class="w-10 h-10 bg-primary-500 dark:bg-primary-600 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endforeach
+
+
                 </div>
             </div>
             <div class="flex justify-center gap-6 mt-12">
@@ -474,44 +282,50 @@
         </div>
     </section>
     <!-- END MAG -->
+
     <!-- 4 BANNERS SECTION -->
     <section class="banners-section py-16">
         <div class="container relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Banner 1 -->
-                <div class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg">
-                    <img src="../front/assets/images/banner/banner-four-3.jpg"
+                <a href="{{$banner1->url}}" class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg block">
+                    <img src="{{'banners/'.$banner1->image}}"
                          class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                         alt="Banner 1">
+                         alt="{{$banner1->image_alt}}"
+                         title="{{$banner1->image_title}}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                </div>
+                </a>
 
                 <!-- Banner 2 -->
-                <div class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg">
-                    <img src="../front/assets/images/banner/banner-four-3.jpg"
+                <a href="{{$banner2->url}}" class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg block">
+                    <img src="{{'banners/'.$banner2->image}}"
                          class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                         alt="Banner 2">
+                         alt="{{$banner2->image_alt}}"
+                         title="{{$banner2->image_title}}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                </div>
+                </a>
 
                 <!-- Banner 3 -->
-                <div class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg">
-                    <img src="../front/assets/images/banner/banner-four-3.jpg"
+                <a href="{{$banner3->url}}" class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg block">
+                    <img src="{{'banners/'.$banner3->image}}"
                          class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                         alt="Banner 3">
+                         alt="{{$banner3->image_alt}}"
+                         title="{{$banner3->image_title}}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                </div>
+                </a>
 
                 <!-- Banner 4 -->
-                <div class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg">
-                    <img src="../front/assets/images/banner/banner-four-3.jpg"
+                <a href="{{$banner4->url}}" class="group relative overflow-hidden rounded-[2rem] h-64 md:h-80 shadow-lg block">
+                    <img src="{{'banners/'.$banner4->image}}"
                          class="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                         alt="Banner 4">
+                         alt="{{$banner4->image_alt}}"
+                         title="{{$banner4->image_title}}">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
+
 
     <!-- SHOP FEATURE -->
     <section class="relative overflow-hidden transition-colors duration-500">
