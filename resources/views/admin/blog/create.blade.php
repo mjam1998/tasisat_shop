@@ -64,8 +64,8 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">تصویر بلاگ</label>
-                            <input type="file" class="form-control mt-2" name="image" accept="image/*">
+                            <label class="control-label required">تصویر بلاگ</label>
+                            <input type="file" class="form-control mt-2" name="image" accept="image/*" required>
                         </div>
                     </div>
 

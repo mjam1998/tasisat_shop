@@ -12,6 +12,97 @@
     <link rel="stylesheet" href="{{asset('front/assets/js/plugin/story-player/styles.css')}}">
     <link rel="stylesheet" href="{{asset('front/assets/js/plugin/swiper/swiper-bundle.min.css')}}">
     <link rel="stylesheet" href="{{asset('front/assets/css/app.css')}}">
+    <link rel="stylesheet" href="{{asset('choices/choices.min.css')}}">
+    <style>
+        /* Custom Choices.js styling */
+        .choices {
+            margin-bottom: 0;
+        }
+
+        .choices__inner {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            min-height: auto !important;
+            font-size: 0.875rem !important;
+            font-weight: 700 !important;
+        }
+
+        .choices__list--single {
+            padding: 0 !important;
+        }
+
+        .choices[data-type*=select-one] .choices__input {
+            background: transparent !important;
+            border: none !important;
+            padding: 0.5rem 1rem !important;
+            margin: 0 !important;
+            font-size: 0.875rem !important;
+            font-weight: 700 !important;
+        }
+
+        .choices__list--dropdown {
+            background: white !important;
+            border: 1px solid #e5e7eb !important;
+            border-radius: 1rem !important;
+            margin-top: 0.5rem !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+            z-index: 50 !important;
+        }
+
+        .dark .choices__list--dropdown {
+            background: rgb(31 41 55) !important;
+            border-color: rgb(55 65 81) !important;
+        }
+
+        .choices__list--dropdown .choices__item {
+            padding: 0.75rem 1rem !important;
+            font-size: 0.875rem !important;
+            font-weight: 700 !important;
+            color: #374151 !important;
+        }
+
+        .dark .choices__list--dropdown .choices__item {
+            color: #e5e7eb !important;
+        }
+
+        .choices__list--dropdown .choices__item--selectable.is-highlighted {
+            background: #eff6ff !important;
+            color: #2563eb !important;
+        }
+
+        .dark .choices__list--dropdown .choices__item--selectable.is-highlighted {
+            background: rgba(37, 99, 235, 0.2) !important;
+            color: #60a5fa !important;
+        }
+
+        .choices[data-type*=select-one]:after {
+            display: none !important;
+        }
+
+        .choices__input {
+            background: transparent !important;
+            color: #374151 !important;
+            font-weight: 700 !important;
+        }
+
+        .dark .choices__input {
+            color: #e5e7eb !important;
+        }
+
+        .choices__input::placeholder {
+            color: #9ca3af !important;
+        }
+
+        .dark .choices__input::placeholder {
+            color: #6b7280 !important;
+        }
+
+        /* Hide original icon when Choices is active */
+        .choices.is-open ~ .category-icon {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-[#fcfdfe] dark:bg-[#050505] min-h-screen transition-colors duration-700 selection:bg-blue-500/30 selection:text-blue-600 ">
 <!-- NEON LIGHT -->
@@ -34,11 +125,11 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16m-7 6h7"/>
                     </svg>
                 </button>
-                <button id="mobile-search-toggle" class="md:hidden p-2.5 rounded-xl border border-gray-200/50 dark:border-white/10 bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 transition-all shadow-sm">
+                <a href="{{route('search')}}" id="mobile-search-toggle" class="md:hidden p-2.5 rounded-xl border border-gray-200/50 dark:border-white/10 bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 transition-all shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
-                </button>
+                </a>
                 <a href="{{route('home')}}" class="flex items-center gap-2 group">
                     <img src="{{asset('front/assets/images/logo.png')}}" class="w-30" alt="">
                 </a>
@@ -145,7 +236,7 @@
                                                     <ul class="space-y-3 pr-4 text-[12.5px] text-gray-500 dark:text-gray-400">
                                                         @foreach($superCategory->categories as $category)
                                                             <li>
-                                                                <a href="#" class="hover:text-[var(--color-primary-500)] transition-colors">{{$category->name}}</a>
+                                                                <a href="{{route('category',['slug'=>$category->slug])}}" class="hover:text-[var(--color-primary-500)] transition-colors">{{$category->name}}</a>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -163,7 +254,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">وبلاگ</a>
+                    <a href="{{route('blogs')}}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">بلاگ</a>
                 </li>
 
                 @php
@@ -544,7 +635,7 @@
 
                                            @foreach($superCategory->categories as $category)
                                                 <li>
-                                                    <a href="#" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors"> {{$category->name}}</a>
+                                                    <a href="{{route('category',['slug'=>$category->slug])}}" class="block p-2 pl-4 text-[10px] text-gray-500 dark:text-gray-400 hover:text-blue-600 transition-colors"> {{$category->name}}</a>
                                                 </li>
                                            @endforeach
 
@@ -655,6 +746,7 @@
 <script src="{{asset('front/assets/js/plugin/swiper/swiper-bundle.min.js')}}"></script>
 <script src="{{asset('front/assets/js/dependencies/swiper-script.js')}}"></script>
 <script src="{{asset('front/assets/js/dependencies/app.js')}}"></script>
+<script src="{{asset('choices/choices.min.js')}}"></script>
 <!-- INITIAL STORY SECTION -->
 @stack('scripts')
 

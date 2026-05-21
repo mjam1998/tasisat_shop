@@ -30,7 +30,7 @@ class AdminBlogController extends Controller
                 new SlugRule(),
             ],
             'description' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5148',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5148',
             'image_alt' => 'nullable|string|max:400',
             'image_title' => 'nullable|string|max:400',
             'meta_description' => 'nullable|string|max:400',
@@ -38,6 +38,7 @@ class AdminBlogController extends Controller
             'keywords' => 'nullable|string|max:400',
         ], [
             'title.required' => 'وارد کردن عنوان الزامی است.',
+            'image.required' => 'وارد کردن عکس الزامی است.',
             'title.max' => 'طول عنوان نباید بیشتر از ۳۰۰ کاراکتر باشد.',
             'keywords.max' => 'کلمات کلیدی نباید بیشتر از 400 کاراکتر باشد',
             'slug.required' => 'وارد کردن اسلاگ الزامی است.',

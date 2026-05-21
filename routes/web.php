@@ -15,7 +15,10 @@ Route::get('/', [homeController::class,'index'])->name('home');
 Route::get('/login', [homeController::class,'login'])->name('login');
 Route::post('/login/submit', [homeController::class,'loginSubmit'])->name('login.submit');
 Route::get('/search', [homeController::class,'search'])->name('search');
-Route::get('category/{slug}', [homeController::class,'category'])->name('category');
+Route::get('/category/{slug}', [homeController::class,'category'])->name('category');
+Route::get('/blogs', [homeController::class,'blogs'])->name('blogs');
+Route::get('/blog/{slug}', [homeController::class, 'blogShow'])->name('front.blog.show');
+
 
 Route::prefix('/admin')->middleware('auth')->group(function(){
    Route::get('/index', [adminController::class,'index'])->name('admin.index');
