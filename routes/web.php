@@ -12,9 +12,12 @@ use App\Http\Controllers\Front\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeController::class,'index'])->name('home');
+Route::get('/login', [homeController::class,'login'])->name('login');
+Route::post('/login/submit', [homeController::class,'loginSubmit'])->name('login.submit');
+Route::get('/search', [homeController::class,'search'])->name('search');
+Route::get('category/{slug}', [homeController::class,'category'])->name('category');
 
- //admin
-Route::prefix('/admin')->group(function(){
+Route::prefix('/admin')->middleware('auth')->group(function(){
    Route::get('/index', [adminController::class,'index'])->name('admin.index');
    Route::get('/list/index', [adminController::class,'list'])->name('admin.list');
    Route::get('/create', [adminController::class,'create'])->name('admin.create');
@@ -116,6 +119,6 @@ Route::prefix('/admin')->group(function(){
         Route::put('/update/{page}', [AdminExtraPageController::class,'update'])->name('admin.extra.page.update');
         Route::delete('/delete/{page}', [AdminExtraPageController::class,'delete'])->name('admin.extra.page.delete');
     });
-
+    Route::post('/logout',[AdminController::class,'logout'])->name('admin.logout');
 });
-//endAdmin
+

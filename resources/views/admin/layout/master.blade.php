@@ -35,7 +35,7 @@
         <div style="font-size: xxx-large; margin-left: 15px" ><i class="bi bi-person-circle"></i></div>
         <div class="user-info">
             <div class="user-name mt-3"><p style="font-size: small"></p></div>
-{{--            {{auth()->user()->name}}--}}
+            {{auth()->user()->name}}
             <div  class="user-status" style="font-size: medium;color: blue">
                ادمین
 
@@ -78,7 +78,13 @@
     </div>
 
     <div class="sidebar-footer">
-{{--        <a href="{{route('writer.logout')}}" style="color: red;"><i class="bi bi-escape"></i> خروج از حساب کاربری</a>--}}
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-danger" aria-label="خروج از حساب">
+            <i class="bi bi-escape"></i> خروج از حساب کاربری
+        </a>
+
+        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
     </div>
 </div>
 

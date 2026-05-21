@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -150,5 +151,15 @@ class AdminController extends Controller
 
         $user->delete();
         return back()->with('success', 'ادمین با موفقیت حذف شد.');
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect(route('home'));
+
     }
 }
