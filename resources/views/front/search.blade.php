@@ -116,7 +116,7 @@
                             <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-2">
 
                                 <!-- Product Image -->
-                                <a href="#" class="block relative mb-4 overflow-hidden rounded-[2rem] h-56 shadow-lg">
+                                <a href="{{route('product.detail',$product->slug)}}" class="block relative mb-4 overflow-hidden rounded-[2rem] h-56 shadow-lg">
                                     <img src="@if($product->image) {{ asset('product/'.$product->image) }}@else {{asset('category/'.$product->category->image)}} @endif "
                                          class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110"
                                          alt="{{ $product->image_alt }}"
@@ -134,7 +134,7 @@
                                 <!-- Product Info -->
                                 <div class="flex-1 flex flex-col">
                                     <!-- Product Name -->
-                                    <a href="#" class="block mb-3">
+                                    <a href="{{route('product.detail',$product->slug)}}" class="block mb-3">
                                         <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 leading-6 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                             {{ $product->name }}
                                         </h3>

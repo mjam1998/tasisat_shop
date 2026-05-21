@@ -18,6 +18,9 @@ Route::get('/search', [homeController::class,'search'])->name('search');
 Route::get('/category/{slug}', [homeController::class,'category'])->name('category');
 Route::get('/blogs', [homeController::class,'blogs'])->name('blogs');
 Route::get('/blog/{slug}', [homeController::class, 'blogShow'])->name('front.blog.show');
+Route::get('/product/{slug}', [homeController::class, 'show'])->name('product.detail');
+Route::post('/product/{slug}/comment', [homeController::class, 'storeComment'])->name('product.comment.store');
+
 
 
 Route::prefix('/admin')->middleware('auth')->group(function(){

@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Front;
 
 
 use App\Enums\BannerType;
+use App\Enums\CommentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\product;
 use App\Models\SuperCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -195,6 +198,92 @@ class HomeController extends Controller
             ->get();
 
         return view('front.blog-show', compact('blog', 'relatedBlogs'));
+    }
+
+    public function show($slug)
+    {
+        $product = Product::with([
+            'category',
+            'subProducts',
+            'comments'
+        ])->where('slug', $slug)->first();
+         $approvedComments = $product->comments()->where('status',CommentStatus::Accepted)->orderByDesc('created_at')->paginate(5);
+        // انتخاب اولین sub-product به عنوان پیش‌فرض (اگر وجود داشته باشد)
+        $selectedSubProduct = $product->subProducts->first();
+
+        // تعیین قیمت نهایی
+        if ($selectedSubProduct) {
+            $finalPrice = $selectedSubProduct->discount > 0
+                ? $selectedSubProduct->price - $selectedSubProduct->discount
+                : $selectedSubProduct->price;
+            $originalPrice = $selectedSubProduct->price;
+            $discountPercentage = round(($selectedSubProduct->discount* 100 / $selectedSubProduct->price));
+        } else {
+            $finalPrice = $product->discount > 0
+                ? $product->price - $product->discount
+                : $product->price;
+            $originalPrice = $product->price;
+            $discountPercentage = round(($product->discount* 100 / $product->price));
+        }
+
+        $keywords = [];
+        if (!empty($product->keywords)) {
+            $decoded = is_string($product->keywords)
+                ? json_decode($product->keywords, true)
+                : $product->keywords;
+
+            // استخراج مقدار value از هر آیتم
+            if (is_array($decoded)) {
+                $keywords = array_map(function($item) {
+                    return is_array($item) && isset($item['value']) ? $item['value'] : $item;
+                }, $decoded);
+            }
+        }
+
+        return view('front.product-detail', compact(
+            'product',
+            'selectedSubProduct',
+            'finalPrice',
+            'originalPrice',
+            'discountPercentage',
+            'keywords',
+            'approvedComments'
+        ));
+    }
+
+    /**
+     * ذخیره نظر جدید
+     */
+    public function storeComment(Request $request, $slug)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+
+            'comment' => 'required|string|min:10|max:1000',
+        ], [
+            'name.required' => 'نام الزامی است',
+            'name.max' => 'نام نباید بیشتر از 255 کاراکتر باشد',
+            'comment.required' => 'متن نظر الزامی است',
+            'comment.min' => 'نظر باید حداقل 10 کاراکتر باشد',
+            'comment.max' => 'نظر نباید بیشتر از 1000 کاراکتر باشد',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $product = Product::query()->where('slug', $slug)->first();
+
+        Comment::create([
+
+            'product_id' => $product->id,
+            'name' => $request->name,
+            'comment' => $request->comment,
+            'status' => \App\Enums\CommentStatus::Waiting,
+        ]);
+
+        return redirect()->back()->with('success', 'نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.');
     }
 
 }
