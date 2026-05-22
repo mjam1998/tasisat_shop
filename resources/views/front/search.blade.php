@@ -149,78 +149,108 @@
                                         کد: {{ $product->code }}
                                     </p>
 
-                                    <!-- Sub Products Dropdown -->
-                                    @if($product->has_sub_product && $product->subProducts->count() > 0)
-                                        <div class="mb-4 relative">
-                                            <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">انتخاب نوع:</label>
-                                            <div class="relative">
-                                                <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
-                                                        data-product-id="{{ $product->id }}">
-                                                    <option value="{{ $product->id }}"
-                                                            data-price="{{ $product->price }}"
-                                                            data-discount="{{ $product->discount }}">
-                                                        پیش‌فرض
-                                                    </option>
-                                                    @foreach($product->subProducts as $subProduct)
-                                                        <option value="{{ $subProduct->id }}"
-                                                                data-price="{{ $subProduct->price }}"
-                                                                data-discount="{{ $subProduct->discount }}">
-                                                            {{ $subProduct->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-
                                     <!-- Price Section -->
                                     <div class="mt-auto pt-4 border-t border-gray-100 dark:border-white/5">
                                         <div class="price-container" data-product-id="{{ $product->id }}">
+
+                                            <!-- Sub Products Dropdown - منتقل شده به داخل price-container -->
+                                            @if($product->has_sub_product && $product->subProducts->count() > 0)
+                                                <div class="mb-4 relative">
+                                                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">انتخاب نوع:</label>
+                                                    <div class="relative">
+                                                        <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
+                                                                data-product-id="{{ $product->id }}">
+                                                            <option value="{{ $product->id }}"
+                                                                    data-price="{{ $product->price }}"
+                                                                    data-discount="{{ $product->discount }}">
+                                                                پیش‌فرض
+                                                            </option>
+                                                            @foreach($product->subProducts as $subProduct)
+                                                                <option value="{{ $subProduct->id }}"
+                                                                        data-price="{{ $subProduct->price }}"
+                                                                        data-discount="{{ $subProduct->discount }}">
+                                                                    {{ $subProduct->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
                                             @php
                                                 $finalPrice = $product->price;
                                                 $hasDiscount = $product->discount > 0;
                                                 if($hasDiscount) {
-                                                    $finalPrice = $product->price - $product->discount ;
+                                                    $finalPrice = $product->price - $product->discount;
                                                 }
                                             @endphp
 
                                             @if($hasDiscount)
                                                 <!-- Original Price (Crossed) -->
                                                 <div class="discount-box flex items-center gap-2 mb-2">
-                                                    <span class="text-sm text-gray-400 dark:text-gray-500 line-through">
-                                                        {{ number_format($product->price) }}
-                                                    </span>
+                    <span class="text-sm text-gray-400 dark:text-gray-500 line-through">
+                        {{ number_format($product->price) }}
+                    </span>
                                                     <span class="text-xs text-red-500 font-bold">
-                                                        {{ round(($product->discount* 100 / $product->price)) }}%
-                                                    </span>
+                        {{ round(($product->discount* 100 / $product->price)) }}%
+                    </span>
                                                 </div>
                                             @endif
 
                                             <!-- Final Price -->
-                                            <div class="flex items-center justify-between">
+                                            <div class="flex items-center justify-between mb-3">
                                                 <div class="flex items-baseline gap-1">
-                                                    <span class="text-2xl font-black text-gray-900 dark:text-white final-price">
-                                                        {{ number_format($finalPrice) }}
-                                                    </span>
+                    <span class="text-2xl font-black text-gray-900 dark:text-white final-price">
+                        {{ number_format($finalPrice) }}
+                    </span>
                                                     <span class="text-xs text-gray-500 dark:text-gray-400">تومان</span>
                                                 </div>
+                                            </div>
 
-                                                <!-- Add to Cart Button -->
-                                                <button class="w-10 h-10 bg-blue-600 dark:bg-blue-500 text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                                    {{ $product->count == 0 ? 'disabled' : '' }}>
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                            <!-- Quantity Selector -->
+                                            <div class="flex items-center gap-2 mb-3">
+                                                <button type="button"
+                                                        class="qty-decrease w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                                                        data-product-id="{{ $product->id }}">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                                    </svg>
+                                                </button>
+
+                                                <input type="number"
+                                                       class="qty-input w-16 h-9 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
+                                                       value="1"
+                                                       min="1"
+                                                       max="99"
+                                                       data-product-id="{{ $product->id }}">
+
+                                                <button type="button"
+                                                        class="qty-increase w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                                                        data-product-id="{{ $product->id }}">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                                     </svg>
                                                 </button>
                                             </div>
+
+                                            <!-- Add to Cart Button -->
+                                            <button class="add-to-cart-btn w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                                    data-product-id="{{ $product->id }}"
+                                            >
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                                </svg>
+                                                <span class="btn-text">افزودن به سبد</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     @endforeach
@@ -288,6 +318,149 @@
                     }
                 });
             });
+            // Quantity controls
+            document.querySelectorAll('.qty-increase').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const input = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
+                    let value = parseInt(input.value);
+                    if(value < 99) {
+                        input.value = value + 1;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.qty-decrease').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const input = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
+                    let value = parseInt(input.value);
+                    if(value > 1) {
+                        input.value = value - 1;
+                    }
+                });
+            });
+
+            // Validate quantity input
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.addEventListener('input', function() {
+                    let value = parseInt(this.value);
+                    if(isNaN(value) || value < 1) {
+                        this.value = 1;
+                    } else if(value > 99) {
+                        this.value = 99;
+                    }
+                });
+            });
+
+            // Add to cart functionality
+
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if(this.disabled) return;
+
+                    const productId = this.dataset.productId;
+                    const qtyInput = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
+                    const quantity = parseInt(qtyInput.value);
+
+                    // دریافت sub_product_id اگر وجود داشته باشد
+                    const subProductSelect = document.querySelector(`.sub-product-select[data-product-id="${productId}"]`);
+                    let subProductId = null;
+
+                    if(subProductSelect) {
+                        const selectedValue = parseInt(subProductSelect.value);
+                        const mainProductId = parseInt(productId);
+
+                        // اگر مقدار انتخاب شده با ID محصول اصلی متفاوت باشد، یعنی sub-product انتخاب شده
+                        if(selectedValue !== mainProductId) {
+                            subProductId = selectedValue;
+                        }
+                    }
+
+
+
+                    // نمایش لودینگ
+                    const btnText = this.querySelector('.btn-text');
+                    const originalText = btnText.textContent;
+                    btnText.textContent = 'در حال افزودن...';
+                    this.disabled = true;
+
+                    // ارسال درخواست AJAX
+                    fetch('{{ route("cart.add") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            sub_product_id: subProductId,
+                            quantity: quantity
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+
+
+                            if(data.status === 'success') {
+                                // به‌روزرسانی شمارنده سبد خرید
+                                const cartCount = document.getElementById('cart-count');
+                                if(cartCount) {
+                                    cartCount.textContent = data.cart_count;
+                                    cartCount.classList.add('animate-bounce');
+                                    setTimeout(() => {
+                                        cartCount.classList.remove('animate-bounce');
+                                    }, 1000);
+                                }
+
+                                // نمایش نوتیفیکیشن موفقیت
+                                showNotification('success', data.message);
+
+                                // ریست کردن تعداد
+                                qtyInput.value = 1;
+                            } else {
+                                showNotification('error', data.message || 'خطا در افزودن به سبد خرید');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('error', 'خطا در برقراری ارتباط با سرور');
+                        })
+                        .finally(() => {
+                            btnText.textContent = originalText;
+                            this.disabled = false;
+                        });
+                });
+            });
+
         });
+
+        // تابع نمایش نوتیفیکیشن
+        function showNotification(type, message) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 -translate-y-20 z-50 px-6 py-4 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-3 ${
+                type === 'success'
+                    ? 'bg-emerald-600 text-white border-2 border-emerald-400'
+                    : 'bg-rose-600 text-white border-2 border-rose-400'
+            }`;
+
+            const icon = type === 'success'
+                ? '<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>'
+                : '<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>';
+
+            notification.innerHTML = `${icon}<span class="font-semibold text-lg">${message}</span>`;
+
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.transform = 'translate(-50%, 0)';
+            }, 10);
+
+            setTimeout(() => {
+                notification.style.transform = 'translate(-50%, -20px)';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
     </script>
 @endpush

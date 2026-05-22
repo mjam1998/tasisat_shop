@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminSendMethodController;
 use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeController::class,'index'])->name('home');
@@ -20,6 +21,16 @@ Route::get('/blogs', [homeController::class,'blogs'])->name('blogs');
 Route::get('/blog/{slug}', [homeController::class, 'blogShow'])->name('front.blog.show');
 Route::get('/product/{slug}', [homeController::class, 'show'])->name('product.detail');
 Route::post('/product/{slug}/comment', [homeController::class, 'storeComment'])->name('product.comment.store');
+Route::get('/cart', [OrderController::class, 'viewCart'])->name('cart.view');
+Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove', [OrderController::class, 'removeFromCart'])->name('cart.remove');
+Route::post('/cart/clear', [OrderController::class, 'clearCart'])->name('cart.clear');
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+Route::post('/checkout/process', [OrderController::class, 'processCheckout'])->name('checkout.process');
+Route::get('/pay-call-back', [OrderController::class, 'payCallback'])->name('pay.call.back');
+Route::get('/pay-result/{code}', [OrderController::class, 'payResult'])->name('pay.result');
+
 
 
 

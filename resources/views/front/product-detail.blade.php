@@ -190,10 +190,42 @@
                             </div>
                         @endif
 
-                        {{-- دکمه افزودن به سبد خرید --}}
-                        <button class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
-                            افزودن به سبد خرید
-                        </button>
+                        {{-- انتخاب تعداد و افزودن به سبد خرید --}}
+                        <div class="space-y-4">
+                            {{-- انتخاب تعداد --}}
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">تعداد:</label>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" id="decreaseQty" class="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                        </svg>
+                                    </button>
+
+                                    <input type="number"
+                                           id="quantity"
+                                           value="1"
+                                           min="1"
+                                           max="99"
+                                           class="w-20 h-12 text-center text-lg font-bold bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
+
+                                    <button type="button" id="increaseQty" class="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {{-- دکمه افزودن به سبد خرید --}}
+                            <button id="addToCartBtn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                                افزودن به سبد خرید
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -535,5 +567,200 @@
                 });
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // دریافت المان‌های مورد نیاز
+            const quantityInput = document.getElementById('quantity');
+            const increaseQtyBtn = document.getElementById('increaseQty');
+            const decreaseQtyBtn = document.getElementById('decreaseQty');
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            const subProductSelect = document.getElementById('subProductSelect');
+            const sizeContainer = document.getElementById('sizeContainer');
+            const sizeValue = document.getElementById('sizeValue');
+
+            // مدیریت افزایش تعداد
+            if (increaseQtyBtn) {
+                increaseQtyBtn.addEventListener('click', function() {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue < 99) {
+                        quantityInput.value = currentValue + 1;
+                    }
+                });
+            }
+
+            // مدیریت کاهش تعداد
+            if (decreaseQtyBtn) {
+                decreaseQtyBtn.addEventListener('click', function() {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+            }
+
+            // محدود کردن ورودی دستی
+            if (quantityInput) {
+                quantityInput.addEventListener('input', function() {
+                    let value = parseInt(this.value);
+                    if (isNaN(value) || value < 1) {
+                        this.value = 1;
+                    } else if (value > 99) {
+                        this.value = 99;
+                    }
+                });
+            }
+
+            // تغییر قیمت با انتخاب sub-product
+            if(subProductSelect) {
+                subProductSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const price = parseFloat(selectedOption.dataset.price);
+                    const discount = parseFloat(selectedOption.dataset.discount);
+                    const size = selectedOption.dataset.size;
+
+                    let finalPrice = price;
+                    let discountPercent = 0;
+
+                    if(discount > 0) {
+                        finalPrice = price - discount;
+                        discountPercent = Math.round((discount / price) * 100);
+                    }
+
+                    const priceContainer = document.getElementById('priceContainer');
+
+                    if(discount > 0) {
+                        priceContainer.innerHTML = `
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-2xl font-bold text-gray-900 dark:text-white">
+                            ${finalPrice.toLocaleString()} تومان
+                        </span>
+                        <span class="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full">
+                            ${discountPercent}% تخفیف
+                        </span>
+                    </div>
+                    <div class="text-gray-500 dark:text-gray-400 line-through">
+                        ${price.toLocaleString()} تومان
+                    </div>
+                `;
+                    } else {
+                        priceContainer.innerHTML = `
+                    <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                        ${price.toLocaleString()} تومان
+                    </div>
+                `;
+                    }
+
+                    if(sizeContainer && sizeValue) {
+                        sizeValue.textContent = size ? size : 'نامشخص';
+                    }
+                });
+            }
+
+            // افزودن به سبد خرید با AJAX
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', function() {
+                    const quantity = parseInt(quantityInput.value);
+                    const selectedOption = subProductSelect ? subProductSelect.value : 'default';
+
+                    const productId = {{ $product->id }};
+                    const subProductId = selectedOption !== 'default' ? selectedOption : null;
+
+                    // نمایش لودینگ
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                در حال افزودن...
+            `;
+
+                    fetch('{{ route("cart.add") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            product_id: productId,
+                            sub_product_id: subProductId,
+                            quantity: quantity
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                showNotification('success', data.message);
+
+                                // به‌روزرسانی شمارنده سبد خرید
+                                const cartCountElement = document.getElementById('cart-count');
+                                if (cartCountElement) {
+                                    cartCountElement.textContent = data.cart_count;
+
+                                    // انیمیشن برای جلب توجه
+                                    cartCountElement.classList.add('animate-bounce');
+                                    setTimeout(() => {
+                                        cartCountElement.classList.remove('animate-bounce');
+                                    }, 1000);
+                                }
+
+                                // ریست کردن تعداد به 1
+                                quantityInput.value = 1;
+                            } else {
+                                showNotification('error', 'خطا در افزودن به سبد خرید');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            showNotification('error', 'خطا در ارتباط با سرور');
+                        })
+                        .finally(() => {
+                            // بازگرداندن دکمه به حالت اولیه
+                            addToCartBtn.disabled = false;
+                            addToCartBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    افزودن به سبد خرید
+                `;
+                        });
+                });
+            }
+
+            // تابع نمایش نوتیفیکیشن
+            function showNotification(type, message) {
+                const notification = document.createElement('div');
+                notification.className = `fixed top-4 left-1/2 transform -translate-x-1/2 -translate-y-20 z-50 px-6 py-4 rounded-lg shadow-2xl transition-all duration-500 flex items-center gap-3 ${
+                    type === 'success'
+                        ? 'bg-emerald-600 text-white border-2 border-emerald-400'
+                        : 'bg-rose-600 text-white border-2 border-rose-400'
+                }`;
+
+                // آیکون
+                const icon = type === 'success'
+                    ? '<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>'
+                    : '<svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>';
+
+                notification.innerHTML = `${icon}<span class="font-semibold text-lg">${message}</span>`;
+
+                document.body.appendChild(notification);
+
+                // انیمیشن ورود
+                setTimeout(() => {
+                    notification.style.transform = 'translate(-50%, 0)';
+                }, 10);
+
+                // انیمیشن خروج
+                setTimeout(() => {
+                    notification.style.transform = 'translate(-50%, -20px)';
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+
+
+        });
+
+
     </script>
 @endpush
