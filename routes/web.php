@@ -30,7 +30,9 @@ Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/process', [OrderController::class, 'processCheckout'])->name('checkout.process');
 Route::get('/pay-call-back', [OrderController::class, 'payCallback'])->name('pay.call.back');
 Route::get('/pay-result/{code}', [OrderController::class, 'payResult'])->name('pay.result');
-
+Route::get('/order/track', [OrderController::class, 'trackOrder'])->name('order.track');
+Route::post('/order/track/result', [OrderController::class, 'trackOrderResult'])->name('order.track.result');
+Route::get('/page/{slug}', [HomeController::class, 'page'])->name('page');
 
 
 

@@ -11,6 +11,7 @@ use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Page;
 use App\Models\product;
 use App\Models\SuperCategory;
 use App\Models\User;
@@ -286,4 +287,13 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'نظر شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.');
     }
 
+    public function page($slug)
+    {
+        $page = Page::query()->where('slug', $slug)->first();
+        if (!$page) {
+            abort(404);
+        }
+        return view('front.dynomic-page', compact('page'));
+
+    }
 }

@@ -241,13 +241,13 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const cartCountBadge = document.getElementById('cart-count');
+            const cartCountBadge = document.querySelectorAll('.cart-badge');
 
             // Update cart count badge
             function updateCartBadge(count) {
-                if (cartCountBadge) {
-                    cartCountBadge.textContent = count;
-                }
+                document.querySelectorAll('.cart-badge').forEach(el => {
+                    el.textContent = count;
+                });
             }
 
             // Update quantity

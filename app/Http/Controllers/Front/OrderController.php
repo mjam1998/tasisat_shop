@@ -12,7 +12,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Morilog\Jalali\Jalalian;
 
 class OrderController extends Controller
 {
@@ -337,9 +336,9 @@ class OrderController extends Controller
             "callback_url"=>$backUrl
         ]);
 
-        $result = $response->json();
+        $result = json_decode($response->getBody(), true);
 
-        $code = $result['data']['code'] ?? null;
+        $code = $result['data']['code']?? null ;
 
         if ($code == 100) {
             $authority = $result['data']['authority'];
@@ -472,22 +471,64 @@ class OrderController extends Controller
                 ]
             ]);
 
-            return redirect()->route('pay.result',['code'=> $order->code]);
+            return redirect()->route('pay.result',['code'=>encrypt( $order->code)]);
         }
         $order->update([
-            'is_paid'=>0,
+            'is_paid'=>false
+            ,
         ]);
-        return redirect()->route('pay.result',['code'=> $order->code]);
+        return redirect()->route('pay.result',['code'=>encrypt( $order->code)]);
     }
 
     public function payResult($code)
     {
+        $code=decrypt($code);
        $order=Order::query()->where('code', $code)->first();
 
        if (!$order) {
            abort(404);
        }
 
-        return view('front.pay-result', compact('order'));
+       if (!$order->is_paid){
+           $failed=true;
+       }else{
+           $failed=false;
+       }
+        return view('front.pay-result', compact('order','failed'));
+    }
+
+    public function trackOrder()
+    {
+        return view('front.order-track');
+    }
+
+    // پردازش کد سفارش و نمایش جزئیات
+    public function trackOrderResult(Request $request)
+    {
+        $request->validate([
+            'order_code' => 'required|string|exists:orders,code',
+        ], [
+            'order_code.required' => 'لطفاً کد سفارش را وارد کنید.',
+            'order_code.string'   => 'کد سفارش نامعتبر است.',
+            'order_code.exists'   => 'سفارشی با این کد یافت نشد.',
+        ]);
+
+
+
+        $order = Order::with([
+            'orderItems.product' => fn($q) => $q->withTrashed(),
+            'sendMethod'=> fn($q) => $q->withTrashed()
+        ])
+            ->where('code', $request->input('order_code'))
+            ->first();
+
+
+
+        if (!$order->is_paid) {
+
+           abort(404);
+        }
+
+        return view('front.order-track-result', compact('order'));
     }
 }

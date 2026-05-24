@@ -693,16 +693,17 @@
                                 showNotification('success', data.message);
 
                                 // به‌روزرسانی شمارنده سبد خرید
-                                const cartCountElement = document.getElementById('cart-count');
-                                if (cartCountElement) {
-                                    cartCountElement.textContent = data.cart_count;
+                                const cartCounts = document.querySelectorAll('.cart-badge');
 
-                                    // انیمیشن برای جلب توجه
-                                    cartCountElement.classList.add('animate-bounce');
+                                cartCounts.forEach(cartCount => {
+                                    cartCount.textContent = data.cart_count;
+
+                                    cartCount.classList.add('animate-bounce');
+
                                     setTimeout(() => {
-                                        cartCountElement.classList.remove('animate-bounce');
+                                        cartCount.classList.remove('animate-bounce');
                                     }, 1000);
-                                }
+                                });
 
                                 // ریست کردن تعداد به 1
                                 quantityInput.value = 1;

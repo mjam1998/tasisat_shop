@@ -384,14 +384,17 @@
 
                             if(data.status === 'success') {
                                 // به‌روزرسانی شمارنده سبد خرید
-                                const cartCount = document.getElementById('cart-count');
-                                if(cartCount) {
+                                const cartCounts = document.querySelectorAll('.cart-badge');
+
+                                cartCounts.forEach(cartCount => {
                                     cartCount.textContent = data.cart_count;
+
                                     cartCount.classList.add('animate-bounce');
+
                                     setTimeout(() => {
                                         cartCount.classList.remove('animate-bounce');
                                     }, 1000);
-                                }
+                                });
 
                                 // نمایش نوتیفیکیشن موفقیت
                                 showNotification('success', data.message);
