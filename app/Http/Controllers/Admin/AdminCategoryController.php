@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\MegaCategory;
+use App\Models\product;
 use App\Models\SuperCategory;
 use App\Rules\SlugRule;
 use Illuminate\Http\Request;
@@ -110,6 +111,7 @@ class AdminCategoryController extends Controller
                 'unique:categories,slug,',
                 new SlugRule(),
             ],
+            'is_active' => 'boolean',
             'meta_title' => 'nullable|string|max:300',
             'meta_description' => 'nullable|string|max:300',
             'keywords' => 'nullable|string|max:400',
@@ -157,6 +159,7 @@ class AdminCategoryController extends Controller
                 'unique:categories,slug,' . $category->id,
                 new SlugRule(),
             ],
+            'is_active' => 'boolean',
             'meta_title' => 'nullable|string|max:300',
             'meta_description' => 'nullable|string|max:300',
             'keywords' => 'nullable|string|max:400',
@@ -180,6 +183,11 @@ class AdminCategoryController extends Controller
             'image_alt.max' => 'Alt تصویر نباید بیشتر از 400 کاراکتر باشد',
             'image_title.max' => 'Title تصویر نباید بیشتر از 400 کاراکتر باشد',
         ]);
+
+        product::query()
+            ->where('category_id',$category->id)
+            ->update(['is_active' => $data['is_active']]);
+
         if ($request->hasFile("image")) {
             $file = $request->file("image");
             if ($category->image) {

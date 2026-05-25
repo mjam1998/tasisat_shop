@@ -118,103 +118,124 @@
 
                                     <!-- Price Section -->
                                     <div class="mt-auto pt-4 border-t border-gray-100 dark:border-white/5">
-                                        <div class="price-container" data-product-id="{{ $product->id }}">
+                                        @if($product->is_active)
+                                            <div class="price-container" data-product-id="{{ $product->id }}">
 
-                                            <!-- Sub Products Dropdown - منتقل شده به داخل price-container -->
-                                            @if($product->has_sub_product && $product->subProducts->count() > 0)
-                                                <div class="mb-4 relative">
-                                                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">انتخاب نوع:</label>
-                                                    <div class="relative">
-                                                        <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
-                                                                data-product-id="{{ $product->id }}">
-                                                            <option value="{{ $product->id }}"
-                                                                    data-price="{{ $product->price }}"
-                                                                    data-discount="{{ $product->discount }}">
-                                                                پیش‌فرض
-                                                            </option>
-                                                            @foreach($product->subProducts as $subProduct)
-                                                                <option value="{{ $subProduct->id }}"
-                                                                        data-price="{{ $subProduct->price }}"
-                                                                        data-discount="{{ $subProduct->discount }}">
-                                                                    {{ $subProduct->name }}
+                                                <!-- Sub Products Dropdown - منتقل شده به داخل price-container -->
+                                                @if($product->has_sub_product && $product->subProducts->count() > 0)
+                                                    <div class="mb-4 relative">
+                                                        <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">انتخاب نوع:</label>
+                                                        <div class="relative">
+                                                            <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
+                                                                    data-product-id="{{ $product->id }}">
+                                                                <option value="{{ $product->id }}"
+                                                                        data-price="{{ $product->price }}"
+                                                                        data-discount="{{ $product->discount }}">
+                                                                    پیش‌فرض
                                                                 </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                                            </svg>
+                                                                @foreach($product->subProducts as $subProduct)
+                                                                    <option value="{{ $subProduct->id }}"
+                                                                            data-price="{{ $subProduct->price }}"
+                                                                            data-discount="{{ $subProduct->discount }}">
+                                                                        {{ $subProduct->name }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                                </svg>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
 
-                                            @php
-                                                $finalPrice = $product->price;
-                                                $hasDiscount = $product->discount > 0;
-                                                if($hasDiscount) {
-                                                    $finalPrice = $product->price - $product->discount;
-                                                }
-                                            @endphp
+                                                @php
+                                                    $finalPrice = $product->price;
+                                                    $hasDiscount = $product->discount > 0;
+                                                    if($hasDiscount) {
+                                                        $finalPrice = $product->price - $product->discount;
+                                                    }
+                                                @endphp
 
-                                            @if($hasDiscount)
-                                                <!-- Original Price (Crossed) -->
-                                                <div class="discount-box flex items-center gap-2 mb-2">
+                                                @if($hasDiscount)
+                                                    <!-- Original Price (Crossed) -->
+                                                    <div class="discount-box flex items-center gap-2 mb-2">
                     <span class="text-sm text-gray-400 dark:text-gray-500 line-through">
                         {{ number_format($product->price) }}
                     </span>
-                                                    <span class="text-xs text-red-500 font-bold">
+                                                        <span class="text-xs text-red-500 font-bold">
                         {{ round(($product->discount* 100 / $product->price)) }}%
                     </span>
-                                                </div>
-                                            @endif
+                                                    </div>
+                                                @endif
 
-                                            <!-- Final Price -->
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-baseline gap-1">
+                                                <!-- Final Price -->
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-baseline gap-1">
                     <span class="text-2xl font-black text-gray-900 dark:text-white final-price">
                         {{ number_format($finalPrice) }}
                     </span>
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">تومان</span>
+                                                        <span class="text-xs text-gray-500 dark:text-gray-400">تومان</span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <!-- Quantity Selector -->
-                                            <div class="flex items-center gap-2 mb-3">
-                                                <button type="button"
-                                                        class="qty-decrease w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                                                        data-product-id="{{ $product->id }}">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                                                    </svg>
-                                                </button>
+                                                <!-- Quantity Selector -->
+                                                <div class="flex items-center gap-2 mb-3">
+                                                    <button type="button"
+                                                            class="qty-decrease w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                                                            data-product-id="{{ $product->id }}">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+                                                        </svg>
+                                                    </button>
 
-                                                <input type="number"
-                                                       class="qty-input w-16 h-9 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
-                                                       value="1"
-                                                       min="1"
-                                                       max="99"
-                                                       data-product-id="{{ $product->id }}">
+                                                    <input type="number"
+                                                           class="qty-input w-16 h-9 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
+                                                           value="1"
+                                                           min="1"
+                                                           max="99"
+                                                           data-product-id="{{ $product->id }}">
 
-                                                <button type="button"
-                                                        class="qty-increase w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                                                        data-product-id="{{ $product->id }}">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                                    <button type="button"
+                                                            class="qty-increase w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
+                                                            data-product-id="{{ $product->id }}">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
 
-                                            <!-- Add to Cart Button -->
-                                            <button class="add-to-cart-btn w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                                    data-product-id="{{ $product->id }}"
+                                                <!-- Add to Cart Button -->
+                                                <button class="add-to-cart-btn w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                                        data-product-id="{{ $product->id }}"
                                                 >
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                                    </svg>
+                                                    <span class="btn-text">افزودن به سبد</span>
+                                                </button>
+                                            </div>
+                                        @else
+                                            {{-- محصول غیرفعال --}}
+                                            <div class="flex flex-col items-center gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 text-center">
+                                                <svg class="w-8 h-8 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
                                                 </svg>
-                                                <span class="btn-text">افزودن به سبد</span>
-                                            </button>
-                                        </div>
+                                                <div>
+                                                    <p class="text-red-600 dark:text-red-400 font-bold text-sm mb-1">این محصول غیرفعال است</p>
+                                                    <p class="text-red-400 dark:text-red-300 text-xs">برای خرید با ادمین تماس بگیرید</p>
+                                                </div>
+                                                <a href="tel:09136437210"
+                                                   class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-md">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                    </svg>
+                                                    تماس با ادمین: 09136437210
+                                                </a>
+                                            </div>
+                                        @endif
+
                                     </div>
                                 </div>
 

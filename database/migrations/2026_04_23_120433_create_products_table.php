@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('image_alt','400')->nullable();
             $table->string('image_title','400')->nullable();
             $table->boolean('has_sub_product')->default(false);
+            $table->boolean('is_active')->default(false);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('category_id')->references('id')->on('categories');

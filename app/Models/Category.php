@@ -18,8 +18,12 @@ class Category extends Model
       'keywords',
         'image',
         'image_alt',
-        'image_title'
+        'image_title',
+        'is_active'
 
+    ];
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
     public function superCategory(){
         return $this->belongsTo(SuperCategory::class);

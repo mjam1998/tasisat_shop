@@ -42,6 +42,7 @@ class AdminProductController extends Controller
                 'unique:products,slug,',
                 new SlugRule(),
             ],
+            'is_active' => 'boolean',
             'code'             => 'required|string|max:400|unique:products,code',
             'size'             => 'nullable|string|max:400',
             'count'            => 'nullable|integer|min:0',
@@ -114,86 +115,7 @@ class AdminProductController extends Controller
         return view('admin.product.edit', compact('product','categories'));
     }
 
-//    public function update(Request $request, Product $product)
-//{
-//    $data = $request->validate([
-//        'category_id'      => 'required|exists:categories,id',
-//        'name'             => 'required|string|max:400',
-//        'slug' => [
-//            'required',
-//            'string',
-//            'max:400',
-//            'unique:products,slug,'.$product->id,
-//            new SlugRule(),
-//        ],
-//        'code'             => 'required|string|max:400|unique:products,code,'.$product->id,
-//        'size'             => 'nullable|string|max:400',
-//        'count'            => 'nullable|integer|min:0',
-//        'price'            => 'required|numeric|min:0',
-//        'discount'         => 'nullable|numeric|min:0',
-//        'description'      => 'nullable',
-//        'meta_title'       => 'nullable|string|max:400',
-//        'meta_description' => 'nullable|string|max:400',
-//        'keywords'         => 'nullable|string|max:400',
-//        'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5148',
-//        'image_alt'        => 'nullable|string|max:400',
-//        'image_title'      => 'nullable|string|max:400',
-//    ], [
-//        // پیام‌های فارسی
-//        'category_id.required' => 'انتخاب دسته‌بندی الزامی است.',
-//        'category_id.exists'   => 'دسته‌بندی انتخاب شده معتبر نیست.',
-//
-//        'name.required' => 'وارد کردن نام محصول الزامی است.',
-//        'name.max'       => 'طول نام محصول نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//
-//        'slug.required' => 'وارد کردن اسلاگ الزامی است.',
-//        'slug.max'       => 'طول اسلاگ نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//        'slug.unique'    => 'این اسلاگ قبلاً استفاده شده است.',
-//        'image.image' => 'فایل انتخابی باید تصویر باشد',
-//        'image.mimes' => 'فرمت تصویر باید jpeg، png، jpg یا webp باشد',
-//        'image.max' => 'حجم تصویر نباید بیشتر از 5 مگابایت باشد',
-//        'code.required' => 'وارد کردن کد محصول الزامی است.',
-//        'code.max'       => 'طول کد محصول نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//        'code.unique'    => 'این کد محصول قبلاً ثبت شده است.',
-//
-//        'size.max' => 'طول مقدار سایز نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//
-//        'count.required' => 'وارد کردن تعداد موجودی الزامی است.',
-//        'count.integer'  => 'مقدار موجودی باید عدد صحیح باشد.',
-//        'count.min'      => 'مقدار موجودی نمی‌تواند منفی باشد.',
-//
-//        'price.required' => 'وارد کردن قیمت الزامی است.',
-//        'price.numeric'  => 'قیمت باید یک مقدار عددی باشد.',
-//        'price.min'      => 'قیمت نمی‌تواند منفی باشد.',
-//
-//        'discount.numeric' => 'تخفیف باید یک مقدار عددی باشد.',
-//        'discount.min'     => 'تخفیف نمی‌تواند منفی باشد.',
-//
-//
-//
-//        'meta_title.max'         => 'طول meta title نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//        'meta_description.max'   => 'طول meta description نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//        'keywords.max'           => 'طول کلمات کلیدی نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//
-//        'image_alt.max'          => 'طول متن جایگزین تصویر نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//        'image_title.max'        => 'طول عنوان تصویر نباید بیشتر از ۴۰۰ کاراکتر باشد.',
-//    ]);
-//    if ($request->hasFile("image")) {
-//        $file = $request->file("image");
-//        if ($product->image) {
-//            Storage::disk('public')->delete('product/' . $product->image);
-//        }
-//        $ext = $file->getClientOriginalExtension();
-//        $filename =  $data['code']. "." . $ext;
-//        $file->storeAs('product', $filename, 'public');
-//        $data['image'] = $filename;
-//    } else {
-//
-//        unset($data['image']);
-//    }
-//    $product->update($data);
-//    return back()->with('success',' محصول با موفقیت ویرایش شد.');
-//}
+
     public function update(Request $request, Product $product)
     {
         $hasSubProducts = $product->subProducts()->exists();
@@ -208,6 +130,7 @@ class AdminProductController extends Controller
                 'unique:products,slug,'.$product->id,
                 new SlugRule(),
             ],
+            'is_active' => 'boolean',
             'code'             => 'required|string|max:400|unique:products,code,'.$product->id,
             'size'             => 'nullable|string|max:400',
             'description'      => 'nullable',
@@ -222,7 +145,7 @@ class AdminProductController extends Controller
         // ✅ اگر SubProduct نداشت → قیمت و موجودی اجباری
         if (!$hasSubProducts) {
             $rules['price']    = 'required|numeric|min:0';
-            $rules['count']    = 'required|integer|min:0';
+            $rules['count']    = 'nullable|integer|min:0';
             $rules['discount'] = 'nullable|numeric|min:0';
         }
 
@@ -1166,6 +1089,26 @@ class AdminProductController extends Controller
         $comment->delete();
         return back()
             ->with('success', 'کامنت با موفقیت حذف شد');
+    }
+    public function bulkUploadForm()
+    {
+        return view('admin.product.bulk-upload');
+    }
+
+    public function bulkUpload(Request $request)
+    {
+        $request->validate(['images.*' => 'required|image']);
+
+        $results = [];
+        foreach ($request->file('images') as $file) {
+            $ext = $file->getClientOriginalExtension();
+            $code = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $filename = $code . '.' . $ext;
+            $file->storeAs('product', $filename, 'public');
+            $results[] = $filename;
+        }
+
+        return back()->with('success', 'آپلود شد: ' . implode(', ', $results));
     }
 
 

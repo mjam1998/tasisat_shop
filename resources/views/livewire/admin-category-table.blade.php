@@ -26,6 +26,7 @@
 
                 <th class="text-center">نام</th>
                 <th class="text-center">اسلاگ</th>
+                <th class="text-center">وضعیت</th>
                 <th class="text-center">عملیات</th>
             </tr>
             </thead>
@@ -38,6 +39,18 @@
                         {{ \Illuminate\Support\Str::limit( $category->name, 25) }}
                     </td>
                     <td class="text-center">{{ $category->slug }}</td>
+                    <td class="text-center">
+                        @if($category->is_active)
+                            <span class="badge bg-success">
+                           فعال
+                        </span>
+                        @else
+                            <span class="badge bg-danger">
+                           غیرفعال
+                        </span>
+                        @endif
+
+                    </td>
                     <td class="text">
                         <div class="dropdown position-static">
                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport">
