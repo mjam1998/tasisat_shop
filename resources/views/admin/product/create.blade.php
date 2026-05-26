@@ -143,15 +143,7 @@
                             <input type="text" class="form-control mt-2" name="image_title" value="{{old('image_title')}}" maxlength="400">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label">وضعیت </label>
-                            <select  class="form-select mt-2" name="is_active">
-                                <option value="1">فعال</option>
-                                <option value="0">غیرفعال</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="col-12">
                         <div class="form-group">
                             <label class="form-label mt-3">توضیحات محصول</label>

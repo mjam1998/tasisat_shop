@@ -151,7 +151,6 @@
 
                                     <!-- Price Section -->
                                     <div class="mt-auto pt-4 border-t border-gray-100 dark:border-white/5">
-                                        @if($product->is_active)
                                         <div class="price-container" data-product-id="{{ $product->id }}">
 
                                             <!-- Sub Products Dropdown - منتقل شده به داخل price-container -->
@@ -249,26 +248,6 @@
                                                 <span class="btn-text">افزودن به سبد</span>
                                             </button>
                                         </div>
-                                        @else
-                                            {{-- محصول غیرفعال --}}
-                                            <div class="flex flex-col items-center gap-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-4 text-center">
-                                                <svg class="w-8 h-8 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
-                                                </svg>
-                                                <div>
-                                                    <p class="text-red-600 dark:text-red-400 font-bold text-sm mb-1">این محصول غیرفعال است</p>
-                                                    <p class="text-red-400 dark:text-red-300 text-xs">برای خرید با ادمین تماس بگیرید</p>
-                                                </div>
-                                                <a href="tel:09136437210"
-                                                   class="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-all shadow-md">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                                    </svg>
-                                                    تماس با ادمین: 09136437210
-                                                </a>
-                                            </div>
-                                        @endif
-
                                     </div>
                                 </div>
 

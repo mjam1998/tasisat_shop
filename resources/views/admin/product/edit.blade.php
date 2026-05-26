@@ -101,16 +101,7 @@
                             <input type="text" class="form-control mt-2" name="meta_description" value="{{old('meta_description', $product->meta_description)}}" maxlength="300">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label">وضعیت </label>
-                            <select class="form-select mt-2" name="is_active">
-                                <option value="1" {{ old('is_active', $product->is_active) == 1 ? 'selected' : '' }}>فعال</option>
-                                <option value="0" {{ old('is_active', $product->is_active) == 0 ? 'selected' : '' }}>غیرفعال</option>
-                            </select>
 
-                        </div>
-                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label"> کلمات کلیدی (keywords)</label>

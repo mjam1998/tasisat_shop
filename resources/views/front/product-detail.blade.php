@@ -190,7 +190,7 @@
                             </div>
                         @endif
 
-                        @if($product->is_active)  {{-- انتخاب تعداد و افزودن به سبد خرید --}}
+                        {{-- انتخاب تعداد و افزودن به سبد خرید --}}
                         <div class="space-y-4">
                             {{-- انتخاب تعداد --}}
                             <div>
@@ -225,25 +225,6 @@
                                 افزودن به سبد خرید
                             </button>
                         </div>
-                        @else
-                            {{-- پیام غیرفعال بودن محصول --}}
-                            <div class="flex flex-col items-center gap-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
-                                <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
-                                </svg>
-                                <div>
-                                    <p class="text-red-600 dark:text-red-400 font-bold text-lg mb-1">این محصول در حال حاضر غیرفعال است</p>
-                                    <p class="text-red-500 dark:text-red-300 text-sm">برای فعال‌سازی و خرید این محصول، لطفاً با ادمین تماس بگیرید.</p>
-                                </div>
-                                <a href="tel:09136437210" class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-md">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                    </svg>
-                                    تماس با ادمین: 09136437210
-                                </a>
-                            </div>
-                        @endif
-
 
                     </div>
                 </div>

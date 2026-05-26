@@ -25,13 +25,11 @@ class product extends Model
       'image',
       'image_alt',
       'image_title',
-        'has_sub_product',
-        'is_active',
+        'has_sub_product'
     ];
 
     protected $casts = [
         'has_sub_product' => 'boolean',
-        'is_active' => 'boolean',
     ];
 
     public function category(){

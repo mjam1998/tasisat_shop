@@ -45,9 +45,7 @@ class OrderController extends Controller
                     'discount' => $subProduct->discount,
                     'final_price' => $subProduct->price - $subProduct->discount,
                     'quantity' => $quantity,
-                    'image' => $product->image
-                        ? asset('product/' . $product->image)
-                        : asset('category/' . $product->category->image),
+                    'image' => $product->image ?? $product->category->image,
                     'slug' => $product->slug
                 ];
             } else {
@@ -257,9 +255,6 @@ class OrderController extends Controller
                 if (!$product) {
                     return redirect()->route('cart.view')->with('error', 'برخی محصولات سبد خرید شما دیگر موجود نیستند.');
                 }
-                if (!$product->is_active) {
-                    return redirect()->route('cart.view')->with('error', 'برخی محصولات سبد خرید شما دیگر فعال نیستند.');
-                }
 
                 $realPrice = $subProduct->price;
                 $realDiscount = $subProduct->discount ?? 0;
@@ -284,9 +279,7 @@ class OrderController extends Controller
                 if (!$product) {
                     return redirect()->route('cart.view')->with('error', 'برخی محصولات سبد خرید شما دیگر موجود نیستند.');
                 }
-                if (!$product->is_active) {
-                    return redirect()->route('cart.view')->with('error', 'برخی محصولات سبد خرید شما دیگر فعال نیستند.');
-                }
+
                 $realPrice = $product->price;
                 $realDiscount = $product->discount ?? 0;
                 $realFinalPrice = $realPrice - $realDiscount;
