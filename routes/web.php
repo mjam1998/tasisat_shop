@@ -104,6 +104,8 @@ Route::prefix('/admin')->middleware('auth')->group(function(){
 
        Route::get('/bulk-upload', [AdminProductController::class, 'bulkUploadForm'])->name('admin.product.bulk-upload');
        Route::post('/bulk-upload', [AdminProductController::class, 'bulkUpload'])->name('admin.product.bulk-upload.store');
+       Route::get('/payment-gateway',[AdminController::class,'paymentGatewayForm'])->name('admin.payment-gateway');
+       Route::put('/payment-gateway/{gateway}',[AdminController::class,'paymentGatewayUpdate'])->name('admin.payment-gateway.update');
 
    });
    Route::prefix('/blog')->group(function(){

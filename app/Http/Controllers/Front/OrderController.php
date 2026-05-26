@@ -6,6 +6,7 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\PaymentGateway;
 use App\Models\product;
 use App\Models\SubProduct;
 use App\Models\User;
@@ -45,7 +46,9 @@ class OrderController extends Controller
                     'discount' => $subProduct->discount,
                     'final_price' => $subProduct->price - $subProduct->discount,
                     'quantity' => $quantity,
-                    'image' => $product->image ?? $product->category->image,
+                    'image' => $product->image
+                        ? asset('product/' . $product->image)
+                        : asset('category/' . $product->category->image),
                     'slug' => $product->slug
                 ];
             } else {
@@ -59,7 +62,9 @@ class OrderController extends Controller
                     'discount' => $product->discount,
                     'final_price' => $product->price - $product->discount,
                     'quantity' => $quantity,
-                    'image' => $product->image ?? $product->category->image,
+                    'image' => $product->image
+                        ? asset('product/' . $product->image)
+                        : asset('category/' . $product->category->image),
                     'slug' => $product->slug
                 ];
             }
@@ -178,12 +183,16 @@ class OrderController extends Controller
         }
 
         $finalTotal = $totalPrice - $totalDiscount;
-
-        return view('front.cart', compact('cart', 'totalPrice', 'totalDiscount', 'finalTotal'));
+        $gatewayActive = PaymentGateway::where('is_active', true)->exists();
+        return view('front.cart', compact('cart', 'totalPrice', 'totalDiscount', 'finalTotal','gatewayActive'));
     }
 
     public function checkout()
     {
+        $gatewayActive = PaymentGateway::first();
+        if ( $gatewayActive->is_active == false ) {
+            return view('front.cart');
+        }
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {
@@ -209,6 +218,10 @@ class OrderController extends Controller
 
     public function processCheckout(Request $request)
     {
+        $gatewayActive = PaymentGateway::first();
+        if ( $gatewayActive->is_active == false ) {
+            return view('front.cart');
+        }
         $cart = session()->get('cart', []);
 
         if (empty($cart)) {

@@ -173,7 +173,7 @@
                     <div class="space-y-4 mb-6 max-h-64 overflow-y-auto">
                         @foreach($cart as $item)
                             <div class="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                                <img src="{{ asset('product/'.$item['image']) }}"
+                                <img src="{{ asset($item['image']) }}"
                                      alt="{{ $item['name'] }}"
                                      class="w-16 h-16 object-cover rounded">
                                 <div class="flex-1">

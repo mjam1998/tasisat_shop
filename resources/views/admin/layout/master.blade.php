@@ -69,8 +69,7 @@
             <li><a href="{{route('admin.send-method.index')}}"  ><i class="bi bi-truck"></i> روش ارسال</a></li>
             <li><a href="{{route('admin.banners.index')}}"  ><i class="bi bi-image"></i> بنرها</a></li>
             <li><a href="{{route('admin.extra.page.index')}}"  ><i class="bi bi-window-stack"></i> صفحات اضافه</a></li>
-
-
+            <li><a href="{{route('admin.payment-gateway')}}"  ><i class="bi bi-bank"></i>  درگاه بانکی</a></li>
 
 
 

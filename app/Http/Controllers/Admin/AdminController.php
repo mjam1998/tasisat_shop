@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentGateway;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -160,6 +161,22 @@ class AdminController extends Controller
         $request->session()->regenerateToken();
 
         return redirect(route('home'));
+
+    }
+    public function paymentGatewayForm()
+    {
+        $gateway=PaymentGateway::first();
+        return view('admin.payment-gateway',compact('gateway'));
+    }
+
+    public function paymentGatewayUpdate(PaymentGateway $gateway, Request $request)
+    {
+        $data=$request->validate([
+            'is_active'=>'boolean',
+        ]);
+        $gateway->update($data);
+
+        return back()->with('success', ' درگاه با موفقیت بروز شد.');
 
     }
 }
