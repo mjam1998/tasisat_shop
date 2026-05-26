@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{{--    <!-- Favicon -->--}}
-{{--    <link rel="icon" type="image/x-icon" href="{{asset('front/aaset/img/logo-mini.jpg')}}">--}}
-{{--    <link rel="icon" type="image/png" href="{{asset('front/aaset/img/logo-mini.jpg')}}">--}}
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{asset('front/assets/images/logo.png')}}">
+    <link rel="icon" type="image/png" href="{{asset('front/assets/images/logo.pn')}}">
 
-{{--    <!-- برای دستگاه‌های اپل -->--}}
-{{--    <link rel="apple-touch-icon" href="{{asset('front/aaset/img/logo-mini.jpg')}}">--}}
+    <!-- برای دستگاه‌های اپل -->
+    <link rel="apple-touch-icon" href="{{asset('front/assets/images/logo.pn')}}">
     <title>پنل کاربری </title>
     <!-- Bootstrap RTL CSS -->
     <link href="{{asset('bootstrap/bootstrap.rtl.min.css')}}" rel="stylesheet">
@@ -60,6 +60,7 @@
                     <li><a href="{{route('admin.product.excel.create')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات ثابت</a></li>
                     <li><a href="{{route('admin.product.excel.create-sub-product')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات متغیر</a></li>
                     <li><a href="{{route('admin.product.index')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> لیست محصولات</a></li>
+                    <li><a href="{{route('admin.product.bulk-upload')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> آپلود گروهی عکس محصولات</a></li>
 
                 </ul>
             </li>

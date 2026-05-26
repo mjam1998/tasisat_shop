@@ -76,7 +76,7 @@
                                         <!-- Product Image -->
                                         <a href="{{ route('product.detail', $item['slug']) }}" class="flex-shrink-0">
                                             <div class="w-24 h-24 rounded-xl overflow-hidden shadow-lg">
-                                                <img src="{{ $item['image'] ? asset('product/'.$item['image']) : asset('images/default-product.jpg') }}"
+                                                <img src="{{ $item['image']  }}"
                                                      class="w-full h-full object-cover"
                                                      alt="{{ $item['name'] }}">
                                             </div>

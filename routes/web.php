@@ -101,6 +101,10 @@ Route::prefix('/admin')->middleware('auth')->group(function(){
        Route::get('/comment/edit/{product}/{comment}', [AdminProductController::class,'commentEdit'])->name('admin.product.comment.edit');
        Route::put('/comment/update/{product}/{comment}', [AdminProductController::class,'commentUpdate'])->name('admin.product.comment.update');
        Route::delete('/comment/delete/{comment}', [AdminProductController::class,'commentDelete'])->name('admin.product.comment.delete');
+
+       Route::get('/bulk-upload', [AdminProductController::class, 'bulkUploadForm'])->name('admin.product.bulk-upload');
+       Route::post('/bulk-upload', [AdminProductController::class, 'bulkUpload'])->name('admin.product.bulk-upload.store');
+
    });
    Route::prefix('/blog')->group(function(){
        Route::get('/index', [AdminBlogController::class,'index'])->name('admin.blog.index');
