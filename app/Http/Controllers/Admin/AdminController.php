@@ -14,7 +14,16 @@ use Illuminate\Validation\Rule;
 class AdminController extends Controller
 {
     public function index(){
-        return view('admin.index');
+        // در Controller یا Route
+        $stats = [
+            'products'      => \App\Models\Product::count(),
+            'categories'    => \App\Models\Category::count(),
+            'orders'        => \App\Models\Order::count(),
+            'waiting_send'  => \App\Models\Order::where('status', \App\Enums\OrderStatus::WaitingSend)->count(),
+            'sent'          => \App\Models\Order::where('status', \App\Enums\OrderStatus::Sent)->count(),
+        ];
+
+        return view('admin.index',compact('stats'));
     }
 
     public function list()

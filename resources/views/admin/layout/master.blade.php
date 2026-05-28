@@ -114,19 +114,19 @@
             </div>
 
         </div>
-{{--        <div class="nav-item" id="nav-profile">--}}
-{{--            <div class="p-1" >--}}
-{{--                <a href="{{route('writer.index')}}" ><i class="bi bi-vector-pen" style="font-size: 30px;color: black"></i></a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+        <div class="nav-item" id="nav-profile">
+            <div class="p-1" >
+                <a href="{{route('admin.index')}}" ><i class="bi bi-house" style="font-size: 30px;color: black"></i></a>
+            </div>
+        </div>
 
 
 
-{{--        <div class="nav-item" id="nav-profile">--}}
-{{--            <div class="p-1" >--}}
-{{--                <a href="{{route('writer.logout')}}" ><i class="bi bi-escape" style="font-size:30px;color: black"></i></a>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+        <div class="nav-item" id="nav-profile">
+            <div class="p-1" >
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" ><i class="bi bi-escape" style="font-size:30px;color: black"></i></a>
+            </div>
+        </div>
 
     </div>
     <!-- Bootstrap JS -->

@@ -1,5 +1,17 @@
 @extends('front.layout.master')
 
+
+@section('meta_title', 'فروشگاه آقای صفر تا صد | تجهیزات تاسیسات')
+@section('meta_description', 'خرید آنلاین تجهیزات تاسیسات، لوله، شیرآلات و اتصالات با بهترین قیمت و ارسال سریع از فروشگاه آقای صفر تا صد')
+@section('meta_keywords', 'تجهیزات تاسیسات، خرید لوله، شیرآلات، اتصالات، فروشگاه تاسیسات اصفهان')
+
+@push('canonical')
+    <link rel="canonical" href="{{ route('home') }}">
+@endpush
+
+
+
+
 @section('content')
     <!-- SLIDER SECTION -->
     <section class="w-full transition-colors duration-500" >
@@ -341,7 +353,7 @@
                         </div>
                     </div>
                     <h3 class="text-sm font-black text-gray-900 dark:text-white mb-2 transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">ارسال فوق سریع</h3>
-                    <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-6 max-w-[150px]">تحویل کالا در کمتر از ۲۴ ساعت در سراسر کشور</p>
+                    <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-6 max-w-[150px]">تحویل کالا در  سراسر کشور</p>
                 </div>
                 <div class="flex flex-col items-center text-center group">
                     <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
@@ -352,8 +364,8 @@
                             </svg>
                         </div>
                     </div>
-                    <h3 class="text-sm font-black text-gray-900 dark:text-white mb-2 transition-colors group-hover:text-secondary-600 dark:group-hover:text-secondary-500">۷ روز ضمانت بازگشت</h3>
-                    <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-6 max-w-[150px]">امکان بازگشت کالا در صورت عدم رضایت یا نقص</p>
+                    <h3 class="text-sm font-black text-gray-900 dark:text-white mb-2 transition-colors group-hover:text-secondary-600 dark:group-hover:text-secondary-500">قیمت مناسب</h3>
+                    <p class="text-[11px] text-gray-500 dark:text-gray-400 leading-6 max-w-[150px]">کیفت بالا کالاهای ساختمانی</p>
                 </div>
                 <div class="flex flex-col items-center text-center group">
                     <div class="relative w-20 h-20 mb-6 flex items-center justify-center">

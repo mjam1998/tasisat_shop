@@ -1,5 +1,15 @@
 @extends('front.layout.master')
 
+@section('meta_title', $blog->meta_title ?? $blog->title . ' | بلاگ آقای صفر تا صد')
+@section('meta_description', $blog->meta_description ?? Str::limit(strip_tags($blog->description), 160))
+@section('meta_keywords', $blog->keywords ?? '')
+@section('og_type', 'article')
+@section('og_image', $blog->image ? asset('blog/' . $blog->image) : asset('front/assets/images/logo.png'))
+
+@push('canonical')
+    <link rel="canonical" href="{{ route('front.blog.show', $blog->slug) }}">
+@endpush
+
 @section('content')
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div class="container mx-auto px-4">

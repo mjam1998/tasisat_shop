@@ -54,7 +54,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">نحوه نمایش محصولات در صفحه دسته بندی  </label>
+                        <select class="form-select mt-2" name="is_list">
+                            <option value="1" {{ old('is_list', $category->is_list) == 1 ? 'selected' : '' }}>لیستی</option>
+                            <option value="0" {{ old('is_list', $category->is_list) == 0 ? 'selected' : '' }}>کارتی</option>
+                        </select>
 
+                    </div>
+                </div>
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <div class="form-group">

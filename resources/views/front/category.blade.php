@@ -1,9 +1,21 @@
 @extends('front.layout.master')
 
+@section('meta_title', $category->meta_title ?? $category->name . ' | فروشگاه آقای صفر تا صد')
+@section('meta_description', $category->meta_description ?? 'خرید ' . $category->name . ' با بهترین قیمت از فروشگاه آقای صفر تا صد')
+@section('meta_keywords', $category->keywords ?? '')
+@section('og_image', $category->image ? asset('category/' . $category->image) : asset('front/assets/images/logo.png'))
+
+@push('canonical')
+    <link rel="canonical" href="{{ route('category', $category->slug) }}">
+@endpush
+
+
 @section('content')
     <!-- PRODUCTS SECTION -->
     <section class="relative overflow-hidden py-16 transition-colors duration-700">
         <div class="container relative z-10">
+            <div class="flex gap-6 items-start">
+                <div class="flex-1 min-w-0">
             <!-- Header -->
             <div class="flex items-end justify-between mb-10 gap-4 flex-wrap">
                 <div class="flex items-center gap-6">
@@ -72,7 +84,131 @@
             </form>
 
             @if($products->count() > 0)
-                <!-- Products Grid -->
+                @if($category->is_list)
+                    {{-- LIST VIEW --}}
+                    <div class="flex flex-col gap-3">
+                        @foreach($products as $product)
+                            @php
+                                $finalPrice = $product->price;
+                                $hasDiscount = $product->discount > 0;
+                                if($hasDiscount) $finalPrice = $product->price - $product->discount;
+                            @endphp
+                            <div class="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4"
+                                 data-product-id="{{ $product->id }}">
+
+                                <div class="flex gap-4" style="direction: rtl;">
+
+                                    {{-- تصویر - سمت راست --}}
+                                    <a href="{{ route('product.detail', $product->slug) }}" class="shrink-0">
+                                        <img src="@if($product->image) {{ asset('product/'.$product->image) }}@else {{asset('category/'.$product->category->image)}} @endif"
+                                             alt="{{ $product->image_alt }}"
+                                             title="{{ $product->image_title }}"
+                                             class="w-36 h-36 object-cover rounded-xl">
+                                    </a>
+
+                                    {{-- اطلاعات - سمت چپ --}}
+                                    <div class="flex-1 flex flex-col gap-2" style="text-align: right;">
+
+                                        {{-- نام --}}
+                                        <a href="{{ route('product.detail', $product->slug) }}"
+                                           class="font-bold text-gray-800 dark:text-white text-base hover:text-primary line-clamp-2">
+                                            {{ $product->name }}
+                                        </a>
+
+                                        {{-- دسته و کد --}}
+                                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                                            <a href="{{ route('category', ['slug' => $product->category->slug]) }}"
+                                               class="hover:text-primary">
+                                                {{ $product->category->name }}
+                                            </a>
+                                            <span>•</span>
+                                            <span>کد: {{ $product->code }}</span>
+                                        </div>
+                                        @php
+                                            $firstSub = ($product->has_sub_product && $product->subProducts->count() > 0)
+        ? $product->subProducts->first()
+        : null;
+
+    $basePrice    = $firstSub ? $firstSub->price    : $product->price;
+    $baseDiscount = $firstSub ? ($firstSub->discount ?? 0) : $product->discount;
+    $finalPrice   = $baseDiscount > 0 ? $basePrice - $baseDiscount : $basePrice;$hasDiscount  = $baseDiscount > 0;
+                                        @endphp
+
+                                        {{-- زیر محصول --}}
+                                        @if($product->has_sub_product && $product->subProducts->count() > 0)
+                                            <select class="sub-product-select w-full max-w-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                                    data-product-id="{{ $product->id }}">
+                                                @foreach($product->subProducts as $sub)
+                                                    <option value="{{ $sub->id }}"
+                                                            data-price="{{ $sub->price }}"
+                                                            data-discount="{{ $sub->discount ?? 0 }}">
+                                                        {{ $sub->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+
+                                        {{-- قیمت + تعداد + دکمه --}}
+                                        <div class="flex flex-wrap items-center gap-3 mt-auto">
+
+                                            {{-- قیمت --}}
+                                            <div class="price-container flex flex-col items-start gap-0.5" data-product-id="{{ $product->id }}">
+                                                @if($hasDiscount)
+                                                    <div class="discount-box flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 line-through">
+                                        {{ number_format($product->price) }}
+                                    </span>
+                                                        <span class="text-xs bg-red-500 text-white rounded px-1.5 py-0.5 font-bold">
+                                      {{ $basePrice > 0 ? round($baseDiscount * 100 / $basePrice) : 0 }}%
+
+                                    </span>
+                                                    </div>
+                                                @endif
+                                                <span class="final-price font-bold text-primary text-lg">
+                                {{ number_format($finalPrice) }}
+                                <span class="text-xs font-normal text-gray-500">تومان</span>
+                            </span>
+                                            </div>
+
+                                            {{-- تعداد --}}
+                                            <div class="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                                                <button class="qty-decrease w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
+                                                        data-product-id="{{ $product->id }}">−</button>
+                                                <input type="number" value="1" min="1" max="99"
+                                                       class="qty-input w-10 h-8 text-center text-sm border-x border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                                                       data-product-id="{{ $product->id }}">
+                                                <button class="qty-increase w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
+                                                        data-product-id="{{ $product->id }}">+</button>
+                                            </div>
+
+                                            {{-- دکمه سبد --}}
+                                            <button class="add-to-cart-btn flex items-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 text-sm font-bold transition"
+                                                    data-product-id="{{ $product->id }}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                                     viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                                </svg>
+                                                <span class="btn-text">افزودن به سبد</span>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- بج تخفیف روی تصویر --}}
+                                @if($hasDiscount)
+                                    <div class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full pointer-events-none">
+                                        {{ $basePrice > 0 ? round($baseDiscount * 100 / $basePrice) : 0 }}%
+
+                                    </div>
+                                @endif
+
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <!-- Products Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @foreach($products as $product)
                         <div class="group relative h-full">
@@ -127,11 +263,7 @@
                                                     <div class="relative">
                                                         <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
                                                                 data-product-id="{{ $product->id }}">
-                                                            <option value="{{ $product->id }}"
-                                                                    data-price="{{ $product->price }}"
-                                                                    data-discount="{{ $product->discount }}">
-                                                                پیش‌فرض
-                                                            </option>
+
                                                             @foreach($product->subProducts as $subProduct)
                                                                 <option value="{{ $subProduct->id }}"
                                                                         data-price="{{ $subProduct->price }}"
@@ -222,6 +354,7 @@
                         </div>
                     @endforeach
                 </div>
+                @endif
             @else
                 <div class="flex flex-col items-center justify-center py-20">
                     <div class="relative w-32 h-32 mb-6">
@@ -236,6 +369,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">در حال حاضر محصولی در این دسته‌بندی وجود ندارد</p>
                 </div>
             @endif
+            </div>
 
             <!-- Pagination -->
             @if($products->hasPages())
@@ -243,6 +377,11 @@
                     {{ $products->appends(['sort' => request('sort'), 'search' => request('search')])->links() }}
                 </div>
             @endif
+            <div class="hidden lg:block w-96 shrink-0"><div class="sticky top-24" id="sidebar-cart">
+                    @include('front.partials.cart-sidebar')
+                </div>
+            </div>
+            </div>
         </div>
     </section>
     <!-- END PRODUCTS SECTION -->
@@ -296,6 +435,7 @@
                         }
                     }
                 });
+                select.dispatchEvent(new Event('change'));
             });
 
             // Quantity controls
@@ -401,6 +541,15 @@
 
                                 // ریست کردن تعداد
                                 qtyInput.value = 1;
+
+                                fetch('{{ route("cart.sidebar") }}')
+                                    .then(res => res.text())
+                                    .then(html => {
+                                        document.getElementById('cart-sidebar-content').innerHTML = html;
+                                    });
+                                if (window.innerWidth < 1024) {
+                                    refreshMobileCartDrawer(true);
+                                }
                             } else {
                                 showNotification('error', data.message || 'خطا در افزودن به سبد خرید');
                             }

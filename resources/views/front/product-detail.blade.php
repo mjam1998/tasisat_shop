@@ -1,5 +1,16 @@
 @extends('front.layout.master')
 
+@section('meta_title', $product->meta_title ?? $product->name . ' | آقای صفر تا صد')
+@section('meta_description', $product->meta_description ?? Str::limit(strip_tags($product->description), 160))
+@section('meta_keywords', $product->keywords ?? '')
+@section('og_type', 'product')
+@section('og_image', $product->image ? asset('/product/' . $product->image) : asset('/category/' . $product->category->image))
+
+@push('canonical')
+    <link rel="canonical" href="{{ route('product.detail', $product->slug) }}">
+@endpush
+
+
 @section('content')
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
@@ -129,12 +140,7 @@
                                 <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">انتخاب نوع محصول:</label>
                                 <div class="relative">
                                     <select id="subProductSelect" class="w-full px-4 py-3 pr-12 rounded-xl bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all appearance-none cursor-pointer">
-                                        <option value="default"
-                                                data-price="{{ $product->price }}"
-                                                data-discount="{{ $product->discount }}"
-                                                data-size="{{ $product->size ?? '' }}">
-                                            پیش‌فرض
-                                        </option>
+
                                         @foreach($product->subProducts as $subProduct)
                                             <option value="{{ $subProduct->id }}"
                                                     data-price="{{ $subProduct->price }}"
@@ -707,6 +713,9 @@
 
                                 // ریست کردن تعداد به 1
                                 quantityInput.value = 1;
+                                if (window.innerWidth < 1024) {
+                                    refreshMobileCartDrawer(true);
+                                }
                             } else {
                                 showNotification('error', 'خطا در افزودن به سبد خرید');
                             }

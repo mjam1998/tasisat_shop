@@ -94,7 +94,11 @@ class HomeController extends Controller
             ->groupBy('products.id');
 
         if ($q) {
-            $query->where('products.name', 'like', "%$q%");
+            $query->where(function ($query) use ($q) {
+                $query->where('products.name', 'like', "%{$q}%")
+                    ->orWhere('products.code', 'like', "%{$q}%");
+            });
+
         }
         if ($categoryId) {
             $query->where('products.category_id', $categoryId);
@@ -136,7 +140,11 @@ class HomeController extends Controller
             ->groupBy('products.id');
 
         if ($search) {
-            $query->where('products.name', 'like', "%$search%");
+            $query->where(function ($query) use ($search) {
+                $query->where('products.name', 'like', "%{$search}%")
+                    ->orWhere('products.code', 'like', "%{$search}%");
+            });
+
         }
 
         // اعمال مرتب‌سازی

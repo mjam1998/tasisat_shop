@@ -4,6 +4,8 @@
     <!-- PRODUCTS SECTION -->
     <section class="relative overflow-hidden py-16 transition-colors duration-700">
         <div class="container relative z-10">
+            <div class="flex gap-6 items-start">
+                <div class="flex-1 min-w-0">
             <!-- Header -->
             <div class="flex items-end justify-between mb-10 gap-4 flex-wrap">
                 <div class="flex items-center gap-6">
@@ -106,152 +108,124 @@
                 </div>
             @else
                 <!-- Products Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div class="flex flex-col gap-3">
                     @foreach($products as $product)
-                        <div class="group relative h-full">
-                            <!-- Card Background -->
-                            <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
+                        @php
+                            $finalPrice = $product->price;
+                            $hasDiscount = $product->discount > 0;
+                            if($hasDiscount) $finalPrice = $product->price - $product->discount;
+                        @endphp
+                        <div class="relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4"
+                             data-product-id="{{ $product->id }}">
 
-                            <!-- Card Content -->
-                            <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-2">
+                            <div class="flex gap-4" style="direction: rtl;">
 
-                                <!-- Product Image -->
-                                <a href="{{route('product.detail',$product->slug)}}" class="block relative mb-4 overflow-hidden rounded-[2rem] h-56 shadow-lg">
-                                    <img src="@if($product->image) {{ asset('product/'.$product->image) }}@else {{asset('category/'.$product->category->image)}} @endif "
-                                         class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110"
+                                {{-- تصویر - سمت راست --}}
+                                <a href="{{ route('product.detail', $product->slug) }}" class="shrink-0">
+                                    <img src="@if($product->image) {{ asset('product/'.$product->image) }}@else {{asset('category/'.$product->category->image)}} @endif"
                                          alt="{{ $product->image_alt }}"
-                                         title="{{ $product->image_title }}">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-                                    <!-- Discount Badge -->
-                                    @if($product->discount > 0)
-                                        <div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1.5 rounded-xl text-xs font-black shadow-lg">
-                                            {{  round(($product->discount* 100 / $product->price))  }}% تخفیف
-                                        </div>
-                                    @endif
+                                         title="{{ $product->image_title }}"
+                                         class="w-36 h-36 object-cover rounded-xl">
                                 </a>
 
-                                <!-- Product Info -->
-                                <div class="flex-1 flex flex-col">
-                                    <!-- Product Name -->
-                                    <a href="{{route('product.detail',$product->slug)}}" class="block mb-3">
-                                        <h3 class="text-[16px] font-black text-gray-800 dark:text-gray-100 leading-6 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                                            {{ $product->name }}
-                                        </h3>
-                                    </a>
-                                    <a href="{{route('category',['slug'=>$product->category->slug])}}"
-                                       class="text-xs text-gray-500 dark:text-gray-400 mb-4 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                                        دسته بندی: {{ $product->category->name }}
+                                {{-- اطلاعات - سمت چپ --}}
+                                <div class="flex-1 flex flex-col gap-2" style="text-align: right;">
+
+                                    {{-- نام --}}
+                                    <a href="{{ route('product.detail', $product->slug) }}"
+                                       class="font-bold text-gray-800 dark:text-white text-base hover:text-primary line-clamp-2">
+                                        {{ $product->name }}
                                     </a>
 
-                                    <!-- Product Code -->
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                                        کد: {{ $product->code }}
-                                    </p>
+                                    {{-- دسته و کد --}}
+                                    <div class="flex items-center gap-2 text-xs text-gray-400">
+                                        <a href="{{ route('category', ['slug' => $product->category->slug]) }}"
+                                           class="hover:text-primary">
+                                            {{ $product->category->name }}
+                                        </a>
+                                        <span>•</span>
+                                        <span>کد: {{ $product->code }}</span>
+                                    </div>
+                                    @php
+                                        $firstSub = ($product->has_sub_product && $product->subProducts->count() > 0)
+    ? $product->subProducts->first()
+    : null;
 
-                                    <!-- Price Section -->
-                                    <div class="mt-auto pt-4 border-t border-gray-100 dark:border-white/5">
-                                        <div class="price-container" data-product-id="{{ $product->id }}">
+$basePrice    = $firstSub ? $firstSub->price    : $product->price;
+$baseDiscount = $firstSub ? ($firstSub->discount ?? 0) : $product->discount;
+$finalPrice   = $baseDiscount > 0 ? $basePrice - $baseDiscount : $basePrice;$hasDiscount  = $baseDiscount > 0;
+                                    @endphp
 
-                                            <!-- Sub Products Dropdown - منتقل شده به داخل price-container -->
-                                            @if($product->has_sub_product && $product->subProducts->count() > 0)
-                                                <div class="mb-4 relative">
-                                                    <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">انتخاب نوع:</label>
-                                                    <div class="relative">
-                                                        <select class="sub-product-select w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 outline-none transition-all appearance-none cursor-pointer"
-                                                                data-product-id="{{ $product->id }}">
-                                                            <option value="{{ $product->id }}"
-                                                                    data-price="{{ $product->price }}"
-                                                                    data-discount="{{ $product->discount }}">
-                                                                پیش‌فرض
-                                                            </option>
-                                                            @foreach($product->subProducts as $subProduct)
-                                                                <option value="{{ $subProduct->id }}"
-                                                                        data-price="{{ $subProduct->price }}"
-                                                                        data-discount="{{ $subProduct->discount }}">
-                                                                    {{ $subProduct->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                    {{-- زیر محصول --}}
+                                    @if($product->has_sub_product && $product->subProducts->count() > 0)
+                                        <select class="sub-product-select w-full max-w-xs border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 text-sm bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+                                                data-product-id="{{ $product->id }}">
+                                            @foreach($product->subProducts as $sub)
+                                                <option value="{{ $sub->id }}"
+                                                        data-price="{{ $sub->price }}"
+                                                        data-discount="{{ $sub->discount ?? 0 }}">
+                                                    {{ $sub->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    @endif
 
-                                            @php
-                                                $finalPrice = $product->price;
-                                                $hasDiscount = $product->discount > 0;
-                                                if($hasDiscount) {
-                                                    $finalPrice = $product->price - $product->discount;
-                                                }
-                                            @endphp
+                                    {{-- قیمت + تعداد + دکمه --}}
+                                    <div class="flex flex-wrap items-center gap-3 mt-auto">
 
+                                        {{-- قیمت --}}
+                                        <div class="price-container flex flex-col items-start gap-0.5" data-product-id="{{ $product->id }}">
                                             @if($hasDiscount)
-                                                <!-- Original Price (Crossed) -->
-                                                <div class="discount-box flex items-center gap-2 mb-2">
-                    <span class="text-sm text-gray-400 dark:text-gray-500 line-through">
-                        {{ number_format($product->price) }}
-                    </span>
-                                                    <span class="text-xs text-red-500 font-bold">
-                        {{ round(($product->discount* 100 / $product->price)) }}%
-                    </span>
+                                                <div class="discount-box flex items-center gap-1.5">
+                                    <span class="text-xs text-gray-400 line-through">
+                                        {{ number_format($product->price) }}
+                                    </span>
+                                                    <span class="text-xs bg-red-500 text-white rounded px-1.5 py-0.5 font-bold">
+                                      {{ $basePrice > 0 ? round($baseDiscount * 100 / $basePrice) : 0 }}%
+
+                                    </span>
                                                 </div>
                                             @endif
-
-                                            <!-- Final Price -->
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-baseline gap-1">
-                    <span class="text-2xl font-black text-gray-900 dark:text-white final-price">
-                        {{ number_format($finalPrice) }}
-                    </span>
-                                                    <span class="text-xs text-gray-500 dark:text-gray-400">تومان</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- Quantity Selector -->
-                                            <div class="flex items-center gap-2 mb-3">
-                                                <button type="button"
-                                                        class="qty-decrease w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                                                        data-product-id="{{ $product->id }}">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                                                    </svg>
-                                                </button>
-
-                                                <input type="number"
-                                                       class="qty-input w-16 h-9 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
-                                                       value="1"
-                                                       min="1"
-                                                       max="99"
-                                                       data-product-id="{{ $product->id }}">
-
-                                                <button type="button"
-                                                        class="qty-increase w-9 h-9 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors"
-                                                        data-product-id="{{ $product->id }}">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-                                            <!-- Add to Cart Button -->
-                                            <button class="add-to-cart-btn w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                                                    data-product-id="{{ $product->id }}"
-                                            >
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                                </svg>
-                                                <span class="btn-text">افزودن به سبد</span>
-                                            </button>
+                                            <span class="final-price font-bold text-primary text-lg">
+                                {{ number_format($finalPrice) }}
+                                <span class="text-xs font-normal text-gray-500">تومان</span>
+                            </span>
                                         </div>
+
+                                        {{-- تعداد --}}
+                                        <div class="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                                            <button class="qty-decrease w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
+                                                    data-product-id="{{ $product->id }}">−</button>
+                                            <input type="number" value="1" min="1" max="99"
+                                                   class="qty-input w-10 h-8 text-center text-sm border-x border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
+                                                   data-product-id="{{ $product->id }}">
+                                            <button class="qty-increase w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
+                                                    data-product-id="{{ $product->id }}">+</button>
+                                        </div>
+
+                                        {{-- دکمه سبد --}}
+                                        <button class="add-to-cart-btn flex items-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 text-sm font-bold transition"
+                                                data-product-id="{{ $product->id }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                                 viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                            </svg>
+                                            <span class="btn-text">افزودن به سبد</span>
+                                        </button>
+
                                     </div>
                                 </div>
-
                             </div>
+
+                            {{-- بج تخفیف روی تصویر --}}
+                            @if($hasDiscount)
+                                <div class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full pointer-events-none">
+                                    {{ $basePrice > 0 ? round($baseDiscount * 100 / $basePrice) : 0 }}%
+
+                                </div>
+                            @endif
+
                         </div>
                     @endforeach
                 </div>
@@ -262,7 +236,14 @@
                         {{ $products->appends(['sort' => request('sort'), 'search' => request('search'), 'category' => request('category')])->links() }}
                     </div>
                 @endif
+                </div>
+                <div class="hidden lg:block w-96 shrink-0">
+                    <div class="sticky top-24" id="sidebar-cart">
+                        @include('front.partials.cart-sidebar')
+                    </div>
+                </div>
 
+            </div>
             @endif
         </div>
     </section>
@@ -421,6 +402,15 @@
 
                                 // ریست کردن تعداد
                                 qtyInput.value = 1;
+
+                                fetch('{{ route("cart.sidebar") }}')
+                                    .then(res => res.text())
+                                    .then(html => {
+                                        document.getElementById('cart-sidebar-content').innerHTML = html;
+                                    });
+                                if (window.innerWidth < 1024) {
+                                    refreshMobileCartDrawer(true);
+                                }
                             } else {
                                 showNotification('error', data.message || 'خطا در افزودن به سبد خرید');
                             }

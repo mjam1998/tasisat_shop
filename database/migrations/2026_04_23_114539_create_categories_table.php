@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('image','400')->nullable();
             $table->string('image_alt','400')->nullable();
             $table->string('image_title','400')->nullable();
+            $table->boolean('is_list')->default(0);
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('super_category_id')->references('id')->on('super_categories');

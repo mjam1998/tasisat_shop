@@ -18,7 +18,8 @@ class Category extends Model
       'keywords',
         'image',
         'image_alt',
-        'image_title'
+        'image_title',
+        'is_list'
 
     ];
     public function superCategory(){

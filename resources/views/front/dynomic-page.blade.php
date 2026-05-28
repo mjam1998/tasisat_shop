@@ -1,5 +1,16 @@
 @extends('front.layout.master')
 
+
+@section('meta_title', $page->meta_title ?? $page->title . ' | بلاگ آقای صفر تا صد')
+@section('meta_description', $page->meta_description ?? Str::limit(strip_tags($page->description), 160))
+
+@section('og_type', 'article')
+
+
+@push('canonical')
+    <link rel="canonical" href="{{ route('page', $page->slug) }}">
+@endpush
+
 @section('content')
     <section class="py-20 px-4">
         <div class="container max-w-4xl">

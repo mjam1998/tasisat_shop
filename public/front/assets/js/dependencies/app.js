@@ -302,7 +302,7 @@ function initCartSystem() {
     const overlay = document.querySelector('.drawer-overlay');
 
     // Manage drawer open/close functionality
-    if (cartBtn && cartDrawer) {
+    if (cartBtn && cartDrawer && overlay && closeBtn) {
         cartBtn.addEventListener('click', () => {
             cartDrawer.classList.remove('pointer-events-none');
             overlay.classList.replace('opacity-0', 'opacity-100');

@@ -33,7 +33,12 @@ Route::get('/pay-result/{code}', [OrderController::class, 'payResult'])->name('p
 Route::get('/order/track', [OrderController::class, 'trackOrder'])->name('order.track');
 Route::post('/order/track/result', [OrderController::class, 'trackOrderResult'])->name('order.track.result');
 Route::get('/page/{slug}', [HomeController::class, 'page'])->name('page');
-
+Route::get('/cart/sidebar', function () {
+    return view('front.partials.cart-sidebar')->render();
+})->name('cart.sidebar');
+Route::get('/cart/mobile-drawer', function () {
+    return view('front.partials.cart-sidebar')->render();
+})->name('cart.mobile.drawer');
 
 
 Route::prefix('/admin')->middleware('auth')->group(function(){
