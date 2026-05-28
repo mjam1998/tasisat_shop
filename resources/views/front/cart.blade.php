@@ -126,7 +126,7 @@
                                                            class="qty-input w-14 h-8 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
                                                            value="{{ $item['quantity'] }}"
                                                            min="1"
-                                                           max="99"
+
                                                            data-cart-key="{{ $key }}">
 
                                                     <button type="button"

@@ -212,7 +212,7 @@
                                            id="quantity"
                                            value="1"
                                            min="1"
-                                           max="99"
+
                                            class="w-20 h-12 text-center text-lg font-bold bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all">
 
                                     <button type="button" id="increaseQty" class="w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg transition-colors">
@@ -598,9 +598,9 @@
             if (decreaseQtyBtn) {
                 decreaseQtyBtn.addEventListener('click', function() {
                     let currentValue = parseInt(quantityInput.value);
-                    if (currentValue > 1) {
+
                         quantityInput.value = currentValue - 1;
-                    }
+
                 });
             }
 
@@ -610,8 +610,6 @@
                     let value = parseInt(this.value);
                     if (isNaN(value) || value < 1) {
                         this.value = 1;
-                    } else if (value > 99) {
-                        this.value = 99;
                     }
                 });
             }

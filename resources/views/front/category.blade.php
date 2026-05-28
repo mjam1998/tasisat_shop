@@ -174,7 +174,7 @@
                                             <div class="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
                                                 <button class="qty-decrease w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
                                                         data-product-id="{{ $product->id }}">−</button>
-                                                <input type="number" value="1" min="1" max="99"
+                                                <input type="number" value="1" min="1"
                                                        class="qty-input w-10 h-8 text-center text-sm border-x border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
                                                        data-product-id="{{ $product->id }}">
                                                 <button class="qty-increase w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
@@ -325,7 +325,6 @@
                                                        class="qty-input w-16 h-9 text-center text-sm font-bold bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg focus:border-blue-500 dark:focus:border-blue-400 outline-none"
                                                        value="1"
                                                        min="1"
-                                                       max="99"
                                                        data-product-id="{{ $product->id }}">
 
                                                 <button type="button"
@@ -444,9 +443,9 @@
                     const productId = this.dataset.productId;
                     const input = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
                     let value = parseInt(input.value);
-                    if(value < 99) {
+
                         input.value = value + 1;
-                    }
+
                 });
             });
 
@@ -467,8 +466,6 @@
                     let value = parseInt(this.value);
                     if(isNaN(value) || value < 1) {
                         this.value = 1;
-                    } else if(value > 99) {
-                        this.value = 99;
                     }
                 });
             });

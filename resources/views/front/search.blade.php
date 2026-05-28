@@ -196,7 +196,7 @@ $finalPrice   = $baseDiscount > 0 ? $basePrice - $baseDiscount : $basePrice;$has
                                         <div class="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
                                             <button class="qty-decrease w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
                                                     data-product-id="{{ $product->id }}">−</button>
-                                            <input type="number" value="1" min="1" max="99"
+                                            <input type="number" value="1" min="1"
                                                    class="qty-input w-10 h-8 text-center text-sm border-x border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
                                                    data-product-id="{{ $product->id }}">
                                             <button class="qty-increase w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 text-lg font-bold"
@@ -305,9 +305,9 @@ $finalPrice   = $baseDiscount > 0 ? $basePrice - $baseDiscount : $basePrice;$has
                     const productId = this.dataset.productId;
                     const input = document.querySelector(`.qty-input[data-product-id="${productId}"]`);
                     let value = parseInt(input.value);
-                    if(value < 99) {
+
                         input.value = value + 1;
-                    }
+
                 });
             });
 
@@ -328,8 +328,6 @@ $finalPrice   = $baseDiscount > 0 ? $basePrice - $baseDiscount : $basePrice;$has
                     let value = parseInt(this.value);
                     if(isNaN(value) || value < 1) {
                         this.value = 1;
-                    } else if(value > 99) {
-                        this.value = 99;
                     }
                 });
             });
