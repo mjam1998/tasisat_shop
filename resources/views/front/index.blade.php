@@ -246,7 +246,7 @@
                 <div class="swiper-wrapper">
                     @foreach($blogs as $blog)
                         <div class="swiper-slide h-auto p-4">
-                            <a href="">
+                            <a href="{{route('front.blog.show',['slug'=>$blog->slug])}}">
                                 <div class="group relative h-full pt-10">
                                     <div class="absolute inset-0 bg-white/80 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.8rem] border border-gray-100 dark:border-white/5 shadow-sm transition-all duration-500 group-hover:border-blue-400/40 group-hover:shadow-blue-500/15"></div>
                                     <div class="relative p-5 flex flex-col h-full z-10 transition-transform duration-500 group-hover:-translate-y-4">

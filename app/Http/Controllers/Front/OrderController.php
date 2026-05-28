@@ -7,12 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentGateway;
-use App\Models\product;
+use App\Models\Product;
 use App\Models\SubProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Throwable;
 
 class OrderController extends Controller
 {
@@ -23,61 +25,75 @@ class OrderController extends Controller
             'sub_product_id' => 'nullable|exists:sub_products,id',
             'quantity' => 'required|integer|min:1'
         ]);
+        try {
+            $productId = $request->product_id;
+            $subProductId = $request->sub_product_id;
+            $quantity = $request->quantity;
 
-        $productId = $request->product_id;
-        $subProductId = $request->sub_product_id;
-        $quantity = $request->quantity;
+            $cart = session()->get('cart', []);
+            $cartKey = $subProductId ? "sub_{$subProductId}" : "product_{$productId}";
 
-        $cart = session()->get('cart', []);
-        $cartKey = $subProductId ? "sub_{$subProductId}" : "product_{$productId}";
-
-        if (isset($cart[$cartKey])) {
-            $cart[$cartKey]['quantity'] += $quantity;
-        } else {
-            if ($subProductId) {
-                $subProduct = SubProduct::findOrFail($subProductId);
-                $product = $subProduct->product;
-
-                $cart[$cartKey] = [
-                    'product_id' => $productId,
-                    'sub_product_id' => $subProductId,
-                    'name' => $product->name . ' - ' . $subProduct->name,
-                    'price' => $subProduct->price,
-                    'discount' => $subProduct->discount,
-                    'final_price' => $subProduct->price - $subProduct->discount,
-                    'quantity' => $quantity,
-                    'image' => $product->image
-                        ? asset('product/' . $product->image)
-                        : asset('category/' . $product->category->image),
-                    'slug' => $product->slug
-                ];
+            if (isset($cart[$cartKey])) {
+                $cart[$cartKey]['quantity'] += $quantity;
             } else {
-                $product = Product::findOrFail($productId);
+                if ($subProductId) {
+                    $subProduct = SubProduct::findOrFail($subProductId);
+                    $product = $subProduct->product;
 
-                $cart[$cartKey] = [
-                    'product_id' => $productId,
-                    'sub_product_id' => null,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'discount' => $product->discount,
-                    'final_price' => $product->price - $product->discount,
-                    'quantity' => $quantity,
-                    'image' => $product->image
-                        ? asset('product/' . $product->image)
-                        : asset('category/' . $product->category->image),
-                    'slug' => $product->slug
-                ];
+                    $cart[$cartKey] = [
+                        'product_id' => $productId,
+                        'sub_product_id' => $subProductId,
+                        'name' => $product->name . ' - ' . $subProduct->name,
+                        'price' => $subProduct->price,
+                        'discount' => $subProduct->discount,
+                        'final_price' => $subProduct->price - $subProduct->discount,
+                        'quantity' => $quantity,
+                        'image' => $product->image
+                            ? asset('product/' . $product->image)
+                            : asset('category/' . $product->category->image),
+                        'slug' => $product->slug
+                    ];
+                } else {
+                    $product = Product::findOrFail($productId);
+
+                    $cart[$cartKey] = [
+                        'product_id' => $productId,
+                        'sub_product_id' => null,
+                        'name' => $product->name,
+                        'price' => $product->price,
+                        'discount' => $product->discount,
+                        'final_price' => $product->price - $product->discount,
+                        'quantity' => $quantity,
+                        'image' => $product->image
+                            ? asset('product/' . $product->image)
+                            : asset('category/' . $product->category->image),
+                        'slug' => $product->slug
+                    ];
+                }
             }
+
+            session()->put('cart', $cart);
+            $count = array_sum(array_column($cart, 'quantity'));
+
+            return response()->json([
+                'status' => 'success',
+                'cart_count' => $count,
+                'message' => $quantity > 1 ? "{$quantity} عدد محصول به سبد خرید اضافه شد." : 'محصول به سبد خرید اضافه شد.'
+            ]);
+        }  catch (Throwable $e) {
+            Log::error($e);
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'خطا',
+                'debug'   => app()->environment('local') ? [
+                    'error' => $e->getMessage(),
+                    'file'  => $e->getFile(),
+                    'line'  => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ] : null,
+            ], 500);
         }
 
-        session()->put('cart', $cart);
-        $count = array_sum(array_column($cart, 'quantity'));
-
-        return response()->json([
-            'status' => 'success',
-            'cart_count' => $count,
-            'message' => $quantity > 1 ? "{$quantity} عدد محصول به سبد خرید اضافه شد." : 'محصول به سبد خرید اضافه شد.'
-        ]);
     }
 
     public function updateCart(Request $request)

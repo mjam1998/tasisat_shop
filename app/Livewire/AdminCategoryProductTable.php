@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 
 
-use App\Models\product;
+use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -31,7 +31,7 @@ class AdminCategoryProductTable extends Component
 
     public function render()
     {
-        $products = product::query()
+        $products = Product::query()
             ->where('category_id', $this->categoryId)
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {

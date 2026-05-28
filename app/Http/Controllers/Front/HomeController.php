@@ -12,7 +12,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Page;
-use App\Models\product;
+use App\Models\Product;
 use App\Models\SuperCategory;
 use App\Models\User;
 use Illuminate\Http\Request;

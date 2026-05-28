@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserType;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Order;
 use App\Models\PaymentGateway;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,11 +19,11 @@ class AdminController extends Controller
     public function index(){
         // در Controller یا Route
         $stats = [
-            'products'      => \App\Models\Product::count(),
-            'categories'    => \App\Models\Category::count(),
-            'orders'        => \App\Models\Order::count(),
-            'waiting_send'  => \App\Models\Order::where('status', \App\Enums\OrderStatus::WaitingSend)->count(),
-            'sent'          => \App\Models\Order::where('status', \App\Enums\OrderStatus::Sent)->count(),
+            'products'      => Product::count(),
+            'categories'    => Category::count(),
+            'orders'        => Order::count(),
+            'waiting_send'  => Order::where('status', \App\Enums\OrderStatus::WaitingSend)->count(),
+            'sent'          => Order::where('status', \App\Enums\OrderStatus::Sent)->count(),
         ];
 
         return view('admin.index',compact('stats'));

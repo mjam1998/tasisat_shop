@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
-use App\Models\product;
+use App\Models\Product;
 use App\Models\SubProduct;
 use App\Rules\SlugRule;
 use Illuminate\Http\Request;
