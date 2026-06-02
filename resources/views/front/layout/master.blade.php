@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('meta_title', 'فروشگاه آقای صفر تا صد')</title>
+    <title>@yield('meta_title', 'آقای صفر تا صد | فروش و اجرای تاسیسات ساختمانی')</title>
 
     {{-- Meta Description --}}
     <meta name="description" content="@yield('meta_description', 'خرید آنلاین تجهیزات تاسیسات با بهترین قیمت از فروشگاه آقای صفر تا صد')">
@@ -135,6 +135,17 @@
         /* Hide original icon when Choices is active */
         .choices.is-open ~ .category-icon {
             display: none;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     </style>
 </head>
@@ -288,7 +299,9 @@
                         </div>
                     </div>
                 </li>
-
+                <li>
+                    <a href="{{route('home')}}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">صفحه اصلی</a>
+                </li>
                 <li>
                     <a href="{{route('blogs')}}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">بلاگ</a>
                 </li>
@@ -311,12 +324,11 @@
     </nav>
 </header>
 <!-- END HEADER -->
-<main >
-
-
-  @yield('content')
-    <!-- END SHOP FEATURE -->
+<main>
+    <h1 class="sr-only">@yield('h1', 'آقای صفر تا صد | فروش و اجرای تاسیسات ساختمانی')</h1>
+    @yield('content')
 </main>
+
 <!-- FOOTER -->
 <footer class="relative amazing-glass-footer pt-24 pb-12 overflow-hidden transition-colors duration-500">
     <div class="container relative z-10">
@@ -376,7 +388,10 @@
                             </span>
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 leading-8 text-justify font-medium max-w-md">
-                    ما در فروشگاه آقای صفر تا صد با ارائه برندهای معتبر داخلی و خارجی، همراه قابل‌اعتماد پیمانکاران، نصابان و مهندسان تاسیسات هستیم. کیفیت، قیمت مناسب و تحویل سریع، تعهد ماست.
+                    آقای صفرتاصد با سال‌ها تجربه در زمینه فروش تجهیزات تاسیسات ساختمانی شامل پکیج، رادیاتور، پمپ اب، لوله و اتصالات پنج لایه و فاضلابی، شیرآلات صنعتی و بهداشتی، و همچنین اجرای تاسیسات مکانیکی (گرمایش، سرمایش، لوله‌کشی) و برقی ساختمان، آماده ارائه خدمات به پیمانکاران، مهندسان، سازندگان و مالکان محترم می‌باشد.
+                    ما با دارا بودن تیم مجری ماهر، پروژه‌های خود را از مرحله طراحی تا تحویل نهایی با بالاترین استانداردهای فنی و کیفیت اجرا می‌کنیم.
+
+
                 </p>
                 <div class="flex gap-4">
                     <a href="https://wa.me/989136437210" class="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 flex items-center justify-center text-gray-400 hover:text-green-500 hover:border-green-500 transition-all group">
@@ -425,12 +440,7 @@
                 <h3 class="footer-title">مجوزهای قانونی</h3>
                 <div class="flex gap-4">
                     <div class="w-28 h-36 bg-white/30 dark:bg-white/[0.02] backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center p-4 transition-all duration-500 hover:shadow-2xl hover:border-blue-500/30 group">
-                        <div class="w-14 h-14 bg-gray-100 dark:bg-white/5 rounded-lg mb-4 flex items-center justify-center transition-all duration-500">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-width="2"/>
-                            </svg>
-                        </div>
-                        <span class="text-[9px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]">Enamad</span>
+                        <a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=523864&Code=zrxd628pd7IxaSUwAeiZHDk7msbhNqkR'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=523864&Code=zrxd628pd7IxaSUwAeiZHDk7msbhNqkR' alt='' style='cursor:pointer' code='zrxd628pd7IxaSUwAeiZHDk7msbhNqkR'></a>
                     </div>
                     <div class="w-28 h-36 bg-white/30 dark:bg-white/[0.02] backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center p-4 transition-all duration-500 hover:shadow-2xl hover:border-blue-500/30 group">
                         <script src="https://www.zarinpal.com/webservice/TrustCode" type="text/javascript"></script>
