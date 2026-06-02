@@ -123,6 +123,10 @@ class AdminOrderController extends Controller
 
     private function generateInvoiceHtml($order)
     {
+        $order->load([
+            'orderItems.product' => fn($q) => $q->withTrashed(),
+            'orderItems.subProduct' => fn($q) => $q->withTrashed(),
+        ]);
         $html = '
 <style>
     * { font-family: dejavusans; }
@@ -205,15 +209,17 @@ class AdminOrderController extends Controller
 
 <div class="header">
     <h1>فاکتور فروش</h1>
-    <p><strong>Laravel</strong></p>
-    <p>تلفن: 021-12345678</p>
+    <p><strong>فروشگاه آقای صفر تا صد</strong></p>
+    <p><strong>www.aghaye0ta100.ir</strong></p>
+     <p><strong>دفتر مرکزی: اصفهان، خیابان بابک نبش کوچه ۲۳</strong></p>
+    <p>تلفن: 09136437210</p>
 </div>
 
 <div class="info-section">
     <h3>اطلاعات سفارش</h3>
     <div class="info-row"><strong>شماره سفارش:</strong> ' . $order->code . '</div>
     <div class="info-row"><strong>تاریخ ثبت:</strong> ' . \Morilog\Jalali\Jalalian::fromDateTime($order->created_at)->format('Y/m/d H:i') . '</div>
-    <div class="info-row"><strong>شماره فاکتور:</strong> ' . $order->id . '</div>
+    <div class="info-row"><strong>شماره فاکتور:</strong> ' . $order->code . '</div>
 </div>
 
 <div class="info-section">
@@ -250,26 +256,26 @@ class AdminOrderController extends Controller
 
         $row = 1;
         foreach ($order->orderItems as $item) {
-            // تعیین نام محصول با بررسی null
-            $productName = 'محصول حذف شده';
 
-            if ($item->product) {
+
+
                 $productName = $item->product->name;
 
                 // بررسی زیرمحصول
                 if ($item->product->has_sub_product && $item->subProduct) {
                     $productName .= ' - ' . $item->subProduct->name;
                 }
-            }
+
 
             $html .= '
         <tr>
             <td>' . $row++ . '</td>
             <td>' . $productName . '</td>
-            <td>' . number_format($item->price) . ' تومان</td>
-            <td>' . number_format($item->discount ?? 0) . ' تومان</td>
+               <td><span style="direction: ltr; display: inline-block;">' . number_format($item->price) . '</span> تومان</td>
+
+            <td><span style="direction: ltr; display: inline-block;">' . number_format($item->discount) . '</span> تومان</td>
             <td>' . $item->quantity . '</td>
-            <td>' . number_format(($item->price * $item->quantity )-$item->discount) . ' تومان</td>
+             <td><span style="direction: ltr; display: inline-block;">' .  number_format(($item->price * $item->quantity )-$item->discount) . '</span> تومان</td>
         </tr>';
         }
 
@@ -279,7 +285,7 @@ class AdminOrderController extends Controller
 </div>
 
 <div class="total-section">
-    <div class="total-row">جمع کل: <strong>' . number_format($order->total_amount) . ' تومان</strong></div>
+    <div class="total-row">جمع کل: <strong style="direction: ltr; display: inline-block;">' . number_format($order->total_amount) . '</strong> <strong>تومان</strong> </div>
 </div>
 
 <div class="payment-box">

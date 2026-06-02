@@ -74,7 +74,7 @@ class AdminProductController extends Controller
 
             'size.max' => 'طول مقدار سایز نباید بیشتر از ۴۰۰ کاراکتر باشد.',
 
-            'count.required' => 'وارد کردن تعداد موجودی الزامی است.',
+
             'count.integer'  => 'مقدار موجودی باید عدد صحیح باشد.',
             'count.min'      => 'مقدار موجودی نمی‌تواند منفی باشد.',
 
@@ -142,7 +142,7 @@ class AdminProductController extends Controller
         // ✅ اگر SubProduct نداشت → قیمت و موجودی اجباری
         if (!$hasSubProducts) {
             $rules['price']    = 'required|numeric|min:0';
-            $rules['count']    = 'required|integer|min:0';
+            $rules['count']    = 'nullable|integer|min:0';
             $rules['discount'] = 'nullable|numeric|min:0';
         }
 
@@ -388,9 +388,9 @@ class AdminProductController extends Controller
                 'price' => 'required|numeric|min:0',
                 'category_slug' => 'required|string|exists:categories,slug',
                 'keywords' => 'nullable|string',
-                'size' => 'nullable|string|max:50',
+                'size' => 'nullable|string',
                 'count' => 'nullable|integer|min:0',
-                'discount' => 'nullable|numeric|min:0|max:100',
+                'discount' => 'nullable|numeric|min:0',
                 'meta_title' => 'nullable|string|max:300',
                 'meta_description' => 'nullable|string|max:300',
                 'image_alt' => 'nullable|string|max:400',
@@ -413,7 +413,7 @@ class AdminProductController extends Controller
                 'count.min' => 'موجودی نمی‌تواند منفی باشد.',
                 'discount.numeric' => 'تخفیف باید عدد باشد.',
                 'discount.min' => 'تخفیف نمی‌تواند منفی باشد.',
-                'discount.max' => 'تخفیف نمی‌تواند بیشتر از ۱۰۰ باشد.',
+
             ]);
 
 
