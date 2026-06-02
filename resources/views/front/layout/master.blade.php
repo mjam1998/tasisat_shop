@@ -47,7 +47,28 @@
     <link rel="stylesheet" href="{{asset('front/assets/js/plugin/swiper/swiper-bundle.min.css')}}">
     <link rel="stylesheet" href="{{asset('front/assets/css/app.css')}}">
     <link rel="stylesheet" href="{{asset('choices/choices.min.css')}}">
-    <style>
+    <style>/* استایل گالری تصاویر ویرایشگر */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .image-gallery img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            aspect-ratio: 1 / 1; /* تصاویر را به صورت مربع و یکدست در می‌آورد */
+            border-radius: 0.75rem; /* گوشه‌های گرد (معادل rounded-xl) */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.05); /* افکت بزرگ‌نمایی ملایم در هاور */
+        }
+
         /* Custom Choices.js styling */
         .choices {
             margin-bottom: 0;
