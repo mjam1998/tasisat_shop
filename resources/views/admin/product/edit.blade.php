@@ -175,6 +175,7 @@
                         <thead class="table-light">
                         <tr>
                             <th>نام</th>
+                            <th>کد</th>
                             <th>قیمت</th>
                             <th>تخفیف</th>
                             <th>عملیات</th>
@@ -185,6 +186,7 @@
                         @foreach($product->subProducts as $sub)
                             <tr>
                                 <td>{{ $sub->name }}</td>
+                                <td>{{ $sub->code }}</td>
                                 <td>{{ number_format($sub->price) }}</td>
                                 <td>{{ $sub->discount }}</td>
                                 <td>

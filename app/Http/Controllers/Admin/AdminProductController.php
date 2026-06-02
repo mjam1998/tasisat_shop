@@ -220,10 +220,10 @@ class AdminProductController extends Controller
 
                 $products[] = [
                     'name' => trim($row['A'] ?? ''),
-                    'slug' => trim($row['B'] ?? ''),
-                    'code' => trim($row['C'] ?? ''),
+                    'slug' => (string) trim($row['B'] ?? ''),
+                    'code' =>  (string) trim($row['C'] ?? ''),
                     'price' => trim($row['D'] ?? ''),
-                    'category_slug' => trim($row['E'] ?? ''),
+                    'category_slug' =>  (string) trim($row['E'] ?? ''),
                     'keywords' => trim($row['F'] ?? ''),
                     'size' => trim($row['G'] ?? ''),
                     'count' => trim($row['H'] ?? ''),
@@ -397,7 +397,25 @@ class AdminProductController extends Controller
                 'image_title' => 'nullable|string|max:400',
                 'description' => 'nullable|string',
                 'image' => 'nullable|string',
+            ], [
+                // پیام‌های خطای فارسی اضافه شدند 👇
+                'name.required' => 'وارد کردن نام محصول الزامی است.',
+                'slug.required' => 'وارد کردن اسلاگ الزامی است.',
+                'slug.unique' => 'این اسلاگ قبلاً استفاده شده است.',
+                'code.required' => 'وارد کردن کد محصول الزامی است.',
+                'code.unique' => 'این کد محصول تکراری است.',
+                'price.required' => 'وارد کردن قیمت الزامی است.',
+                'price.numeric' => 'قیمت باید عدد باشد.',
+                'price.min' => 'قیمت نمی‌تواند منفی باشد.',
+                'category_slug.required' => 'اسلاگ دسته‌بندی الزامی است.',
+                'category_slug.exists' => 'دسته‌بندی با این اسلاگ یافت نشد.',
+                'count.integer' => 'موجودی باید عدد صحیح باشد.',
+                'count.min' => 'موجودی نمی‌تواند منفی باشد.',
+                'discount.numeric' => 'تخفیف باید عدد باشد.',
+                'discount.min' => 'تخفیف نمی‌تواند منفی باشد.',
+                'discount.max' => 'تخفیف نمی‌تواند بیشتر از ۱۰۰ باشد.',
             ]);
+
 
             if ($validator->fails()) {
                 $rowErrors = "ردیف {$rowNumber}: " . implode(', ', $validator->errors()->all());
@@ -553,7 +571,6 @@ class AdminProductController extends Controller
     public function importSubProducts()
     {
         if (!isset($_FILES['file'])) {
-
             return back()->withErrors('فایلی آپلود نشده است.');
         }
 
@@ -566,7 +583,7 @@ class AdminProductController extends Controller
         }
 
         try {
-            $spreadsheet = IOFactory::load($file['tmp_name']);
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file['tmp_name']);
             $sheet = $spreadsheet->getActiveSheet();
             $data = $sheet->toArray(null, true, true, true);
 
@@ -575,16 +592,16 @@ class AdminProductController extends Controller
 
             $products = [];
             foreach ($data as $row) {
-                // فیلتر ردیف‌های خالی
-                if (empty(trim($row['A']))) {
+                // فیلتر ردیف‌های کاملاً خالی (بررسی ستون نام زیر محصول در کنار ستون کد)
+                if (empty(trim($row['A'])) && empty(trim($row['L']))) {
                     continue;
                 }
 
                 $products[] = [
-                    'code' => trim($row['A']),
+                    'code' =>  (string) trim($row['A']),
                     'name' => trim($row['B']),
-                    'slug' => trim($row['C']),
-                    'category_slug' => trim($row['D']),
+                    'slug' =>  (string) trim($row['C']),
+                    'category_slug' => (string) trim($row['D']),
                     'description' => trim($row['E']),
                     'meta_title' => trim($row['F']),
                     'meta_description' => trim($row['G']),
@@ -592,21 +609,28 @@ class AdminProductController extends Controller
                     'image' => trim($row['I']),
                     'image_alt' => trim($row['J']),
                     'image_title' => trim($row['K']),
-                    'sub_product_name' => trim($row['L']),
-                    'sub_product_price' => trim($row['M']),
-                    'sub_product_discount' => trim($row['N'])
+                    'sub_product_code'     => (string) trim($row['L']), // ستون L: کد زیرمحصول
+                    'sub_product_name'     => trim($row['M']), // ستون M: نام زیرمحصول
+                    'sub_product_price'    => trim($row['N']), // ستون N: قیمت زیرمحصول
+                    'sub_product_discount' => trim($row['O'])  // ستون O: تخفیف زیرمحصول
                 ];
             }
 
-            // ادامه لاجیک import...
-            $this->processSubProducts($products);
+            // گرفتن خروجی و خطاهای متد پردازش
+            $result = $this->processSubProducts($products);
 
-            return back()->with('success', 'محصولات با موفقیت وارد شدند.');
+            // اگر خطایی وجود داشت، آن را نمایش بده
+            if (!empty($result['errors'])) {
+                return back()->withErrors($result['errors']);
+            }
+
+            return back()->with('success', "محصولات با موفقیت وارد شدند. (محصول جدید: {$result['products_created']} / زیرمحصول جدید: {$result['subproducts_created']})");
 
         } catch (\Exception $e) {
             return back()->withErrors('خطا در خواندن فایل: ' . $e->getMessage());
         }
     }
+
 
 
     private function processSubProducts($data)
@@ -650,11 +674,12 @@ class AdminProductController extends Controller
             $firstRowNumber = $rows[0]['index'] + 2;
 
             // اعتبارسنجی ردیف اول (محصول اصلی)
+
             $productData = [
-                'code' => $code,
-                'name' => $firstRow['name'] ?? null,
-                'slug' => $firstRow['slug'] ?? null,  // ← اضافه شد
-                'category_slug' => $firstRow['category_slug'] ?? null,
+                'code' => (string) $code, // <--- کست مجدد به رشته در این خط
+                'name' => isset($firstRow['name']) ? (string)$firstRow['name'] : null,
+                'slug' => isset($firstRow['slug']) ? (string)$firstRow['slug'] : null,
+                'category_slug' => isset($firstRow['category_slug']) ? (string)$firstRow['category_slug'] : null,
                 'description' => $firstRow['description'] ?? null,
                 'meta_title' => $firstRow['meta_title'] ?? null,
                 'meta_description' => $firstRow['meta_description'] ?? null,
@@ -663,6 +688,7 @@ class AdminProductController extends Controller
                 'image_alt' => $firstRow['image_alt'] ?? null,
                 'image_title' => $firstRow['image_title'] ?? null,
             ];
+
 
             $existingProduct = Product::where('code', $code)->first();
 
@@ -674,7 +700,7 @@ class AdminProductController extends Controller
                     Rule::unique('products', 'code')->ignore($existingProduct?->id)
                 ],
                 'name' => 'required|string|max:255',
-                'slug' => [  // ← اضافه شد
+                'slug' => [
                     'required',
                     'string',
                     'max:400',
@@ -688,6 +714,21 @@ class AdminProductController extends Controller
                 'image' => 'nullable|string',
                 'image_alt' => 'nullable|string|max:400',
                 'image_title' => 'nullable|string|max:400',
+            ], [
+                // پیام‌های فارسی محصول
+                'code.required' => 'کد محصول الزامی است.',
+                'code.string' => 'کد محصول باید یک عبارت متنی باشد.',
+                'code.unique' => 'کد محصول تکراری است.',
+                'name.required' => 'نام محصول الزامی است.',
+                'name.string' => 'نام محصول باید متنی باشد.',
+                'slug.required' => 'اسلاگ محصول الزامی است.',
+                'slug.string' => 'اسلاگ باید یک عبارت متنی باشد.',
+                'slug.unique' => 'اسلاگ تکراری است.',
+                'category_slug.required' => 'اسلاگ دسته‌بندی الزامی است.',
+                'category_slug.exists' => 'دسته‌بندی با این اسلاگ یافت نشد.',
+                // سایر خطاهای متنی
+                'string' => 'فیلد :attribute باید متنی باشد.',
+                'max' => 'طول مجاز رعایت نشده است.',
             ]);
 
             if ($validator->fails()) {
@@ -741,16 +782,31 @@ class AdminProductController extends Controller
                     $rowNumber = $rowData['index'] + 2;
 
                     $subProductData = [
+                        'sub_product_code'     => $row['sub_product_code'] ?? null,
                         'sub_product_name' => $row['sub_product_name'] ?? null,
                         'sub_product_price' => $row['sub_product_price'] ?? null,
                         'sub_product_discount' => $row['sub_product_discount'] ?? 0,
                     ];
 
                     $subValidator = Validator::make($subProductData, [
+                        'sub_product_code'     => 'required|string',
                         'sub_product_name' => 'required|string|max:255',
                         'sub_product_price' => 'required|numeric|min:0',
-                        'sub_product_discount' => 'nullable|numeric|min:0|max:100',
+                        'sub_product_discount' => 'nullable|numeric|min:0',
+                    ], [
+                        // پیام‌های فارسی زیرمحصول
+                        'sub_product_code.required'     => 'کد زیرمحصول الزامی است.',
+                        'sub_product_code.string'       => 'کد زیرمحصول باید متنی باشد.',
+                        'sub_product_name.required' => 'نام زیرمحصول الزامی است.',
+                        'sub_product_name.string' => 'نام زیرمحصول باید متنی باشد.',
+                        'sub_product_price.required' => 'قیمت زیرمحصول الزامی است.',
+                        'sub_product_price.numeric' => 'قیمت زیرمحصول باید عدد باشد.',
+                        'sub_product_price.min' => 'قیمت نمی‌تواند منفی باشد.',
+                        'sub_product_discount.numeric' => 'تخفیف باید عدد باشد.',
+                        'sub_product_discount.min' => 'تخفیف نمی‌تواند منفی باشد.',
+                        'sub_product_discount.max' => 'تخفیف نمی‌تواند بیشتر از 100 باشد.',
                     ]);
+
 
                     if ($subValidator->fails()) {
                         $errors[] = "ردیف {$rowNumber} (زیرمحصول): " . implode(', ', $subValidator->errors()->all());
@@ -761,9 +817,10 @@ class AdminProductController extends Controller
                     $subProduct = SubProduct::updateOrCreate(
                         [
                             'product_id' => $product->id,
-                            'name' => $subProductData['sub_product_name']
+                            'code'       => (string) $subProductData['sub_product_code']
                         ],
                         [
+                            'name'       => (string) $subProductData['sub_product_name'],
                             'price' => $subProductData['sub_product_price'],
                             'discount' => $subProductData['sub_product_discount'] ?? 0,
                         ]
@@ -814,6 +871,7 @@ class AdminProductController extends Controller
             'image' => 'تصویر',
             'image_alt' => 'متن جایگزین تصویر',
             'image_title' => 'عنوان تصویر',
+            'sub_product_code'=>'کد زیر محصول',
             'sub_product_name' => 'نام زیرمحصول',
             'sub_product_price' => 'قیمت زیرمحصول',
             'sub_product_discount' => 'تخفیف زیرمحصول '
@@ -827,7 +885,7 @@ class AdminProductController extends Controller
         }
 
         // استایل header
-        $sheet->getStyle('A1:N1')->applyFromArray([
+        $sheet->getStyle('A1:O1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF']
@@ -850,15 +908,17 @@ class AdminProductController extends Controller
         $sheet->setCellValue('E2', 'توضیحات محصول');
         $sheet->setCellValue('H2', 'لوله,pipe');
         $sheet->setCellValue('I2', 'pipe.jpg');
-        $sheet->setCellValue('L2', 'مدل 12 ');
-        $sheet->setCellValue('M2', '15000000');
-        $sheet->setCellValue('N2', '1000');
+        $sheet->setCellValue('L2', 'sub-pipe-1 ');
+        $sheet->setCellValue('M2', 'مدل 12 ');
+        $sheet->setCellValue('N2', '15000000');
+        $sheet->setCellValue('O2', '1000');
 
         // ردیف نمونه 2 (زیرمحصول دوم همان محصول)
         $sheet->setCellValue('A3', 'PROD14');
-        $sheet->setCellValue('L3', 'مدل 13');
-        $sheet->setCellValue('M3', '18000000');
-        $sheet->setCellValue('N3', '500');
+        $sheet->setCellValue('L3', 'sub-pipe-2 ');
+        $sheet->setCellValue('M3', 'مدل 13');
+        $sheet->setCellValue('N3', '18000000');
+        $sheet->setCellValue('O3', '500');
 
         // ردیف نمونه 3 (محصول جدید)
         $sheet->setCellValue('A4', 'PROD15');
@@ -866,9 +926,10 @@ class AdminProductController extends Controller
         $sheet->setCellValue('C4', 'sipon');
         $sheet->setCellValue('D4', 'sip-cat');
         $sheet->setCellValue('H4', 'سیفون,تاسیسات');
-        $sheet->setCellValue('L4', 'رنگ سفید');
-        $sheet->setCellValue('M4', '25000000');
-        $sheet->setCellValue('N4', '0');
+        $sheet->setCellValue('L4', 'sub-sipon-1 ');
+        $sheet->setCellValue('M4', 'رنگ سفید');
+        $sheet->setCellValue('N4', '25000000');
+        $sheet->setCellValue('O4', '0');
 
         // تنظیم ارتفاع ردیف اول
         $sheet->getRowDimension(1)->setRowHeight(25);
@@ -897,6 +958,7 @@ class AdminProductController extends Controller
     {
         $data = $request->validate([
             'name'    => 'required|string',
+            'code'    => 'required|string',
             'price'    => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0',
         ], [

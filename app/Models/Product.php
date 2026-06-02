@@ -53,6 +53,12 @@ class Product extends Model
                 'slug'=> $product->slug . '_deleted_'.time(),
                 'code'=> $product->code . '_deleted_'.time(),
             ]);
+            $product->subProducts()->each(function ($subProduct) {
+                $subProduct->delete();
+            });
+            $product->comments()->each(function ($comment) {
+                $comment->delete();
+            });
 
         });
     }

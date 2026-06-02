@@ -19,6 +19,11 @@
                    value="{{ old('name',$subproduct->name) }}" required>
         </div>
         <div class="mb-3">
+            <label class="required">کد</label>
+            <input type="text" name="code" class="form-control "
+                   value="{{ old('code',$subproduct->code) }}" required>
+        </div>
+        <div class="mb-3">
             <label class="required">قیمت</label>
             <input type="number" name="price" class="form-control "
                    value="{{ old('price',$subproduct->price) }}" required>
