@@ -61,6 +61,7 @@
                     <li><a href="{{route('admin.product.excel.create-sub-product')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> افزودن لیستی محصولات متغیر</a></li>
                     <li><a href="{{route('admin.product.index')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> لیست محصولات</a></li>
                     <li><a href="{{route('admin.product.bulk-upload')}}" style="font-size: small"><i class="bi bi-pencil-square"></i> آپلود گروهی عکس محصولات</a></li>
+                    <li><a href="{{route('admin.product.uploaded-images')}}" style="font-size: small"><i class="bi bi-pencil-square"></i>  عکس های آپلود شده</a></li>
 
                 </ul>
             </li>

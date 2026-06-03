@@ -1136,4 +1136,33 @@ class AdminProductController extends Controller
 
         return back()->with('success', 'آپلود شد: ' . implode(', ', $results));
     }
+
+    public function uploadedImages(Request $request)
+    {
+        $allFiles = collect(Storage::disk('public')->files('product'))
+            ->sortByDesc(fn($f) => Storage::disk('public')->lastModified($f))
+            ->map(fn($f) => basename($f))
+            ->values();
+
+        $perPage = 24;
+        $page = $request->input('page', 1);
+        $items = $allFiles->slice(($page - 1) * $perPage, $perPage)->values();
+
+        $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
+            $items, $allFiles->count(), $perPage, $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        return view('admin.product.uploaded-images', ['files' => $paginator]);
+    }
+
+    public function uploadedDeleteImage($filename)
+    {
+        $path = 'product/' . $filename;
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+        return redirect()->route('admin.product.uploaded-images')     ->with('success', 'تصویر حذف شد.');
+    }
+
 }
